@@ -1,2 +1,24 @@
-# Digamber-Nuker
-Digamber Nuker — A high-performance Discord utility framework for stress-testing, load analysis, permission audits, and automated moderation tools. Designed for server owners, testers, and developers who want to evaluate server stability, automate cleanup tasks, and experiment with high-level Discord bot workflows — safely and responsibly.
+# 💀 Digamber Nuker Bot
+
+A Discord bot that automatically nukes servers upon joining.
+
+## ⚠️ WARNING
+This bot is for educational purposes only. Use responsibly and only on your own servers.
+
+## Features
+- Auto server nuke on join
+- Mass member kicking
+- Channel deletion and spam
+- Role deletion
+- Automatic leave after nuke
+
+## Deployment
+1. Set `DISCORD_TOKEN` environment variable
+2. Deploy to Render
+3. Invite bot to target server
+
+## Commands
+- Auto-execute on server join
+
+## Disclaimer
+Use at your own risk. The developer is not responsible for any misuse.
