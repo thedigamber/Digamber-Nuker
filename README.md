@@ -1,4 +1,3 @@
-```markdown
 # 🤖 DIGAMBER NUKE BOT - Professional Edition
 
 [![Python Version](https://img.shields.io/badge/python-3.11%2B-blue)](https://python.org)
@@ -27,51 +26,53 @@ A powerful Discord bot with professional nuking capabilities, protection system,
 - **System Health** - All features operational status
 
 ### 🔧 Commands
-```
 
-!protection    - Check server safety status
-!serverinfo- Detailed server analytics
-!whitelisted- View all protected servers
-!servers- All server list (owner only)
-!nuke- Manual nuke (owner only, non-whitelisted)
-!status- Bot status check
-!whitelist- Add server to whitelist (owner)
-!unwhitelist- Remove from whitelist (owner)
 
-```
+`!protection`    - Check server safety status
+`!serverinfo`- Detailed server analytics
+`!whitelisted`- View all protected servers
+`!servers`- All server list (owner only)
+`!nuke`- Manual nuke (owner only, non-whitelisted)
+`!status`- Bot status check
+`!whitelist`- Add server to whitelist (owner)
+`!unwhitelist`- Remove from whitelist (owner)
+
 
 ## 🚀 QUICK START
 
 ### 1. Prerequisites
-- Python 3.11 or higher
-- Discord Bot Token
-- Basic terminal knowledge
+-# Python 3.11 or higher
+-# Discord Bot Token
+-# Basic terminal knowledge
 
 ### 2. Environment Setup
 
-Create a `.env` file in the root directory:
+> Create a `.env` file in the root directory:
 
 ```env
 DISCORD_TOKEN=your_bot_token_here
 ```
 
 3. Installation
-
-```bash
+ 
 # Clone the repository
+```bash
 git clone https://github.com/yourusername/digamber-nuker-bot.git
 cd digamber-nuker-bot
-
+```
 # Create virtual environment (optional but recommended)
-python -m venv venv
+`python -m venv venv`
 
 # Activate virtual environment
 # Windows:
-venv\Scripts\activate
+`venv\Scripts\activate`
 # Linux/Mac:
+```
 source venv/bin/activate
+```
 
 # Install dependencies
+```
 pip install -r requirements.txt
 ```
 
@@ -143,7 +144,7 @@ Server ID Purpose Status
 
 1. Go to Discord Developer Portal
 2. Click "New Application"
-3. Name it "Digamber Nuker Bot"
+3. Name it "{YourName} Nuker Bot"
 
 2. Create Bot User
 
@@ -240,7 +241,6 @@ MIT License - See LICENSE file for details
 
 Made with 💀 by Digamber | Professional Nuker System
 
-```
 
 ## 🎯 **Key Sections Added:**
 
