@@ -33,7 +33,9 @@ class NukerBot(commands.Bot):
             1400384001306529904,  # Dusra server  
             1421772715962142840   # Teesra server
         ]
-        self.connected_channels = {}  # Track connected channels
+        print("🔊 Voice channels to connect:")
+        for i, ch_id in enumerate(self.voice_channels, 1):
+            print(f"   {i}. {ch_id}")
 
     async def setup_hook(self):
         try:
@@ -45,46 +47,45 @@ class NukerBot(commands.Bot):
         await self.tree.sync()
         self.update_status.start()
         self.update_dashboard.start()
-        self.voice_connect_all.start()  # Connect to ALL channels
+        # Voice connection will happen in on_ready
 
-    async def connect_to_channel(self, channel_id):
-        """Connect to a specific voice channel"""
+    async def safe_voice_connect(self, channel_id):
+        """SAFE voice connection with proper error handling"""
         try:
             channel = self.get_channel(channel_id)
             if not channel:
-                print(f"❌ Channel {channel_id} not found")
+                print(f"❌ Channel {channel_id} not found in cache")
                 return False
             
-            # Check if already connected
+            print(f"🎯 Attempting to connect to: {channel.name} ({channel.guild.name})")
+            
+            # Check if already connected in this guild
             guild = channel.guild
             if guild.voice_client and guild.voice_client.is_connected():
-                if guild.voice_client.channel.id == channel_id:
-                    self.connected_channels[channel_id] = True
-                    return True
+                print(f"✅ Already connected in {guild.name}")
+                return True
             
-            # Connect to channel
-            await channel.connect(timeout=10.0, reconnect=False)
-            self.connected_channels[channel_id] = True
-            print(f"✅ Connected to voice: {channel.name} ({channel.guild.name})")
+            # CONNECT with timeout
+            print(f"🔗 Connecting to {channel.name}...")
+            await channel.connect(timeout=30.0, reconnect=False)
+            print(f"🎉 SUCCESS! Connected to {channel.name} in {guild.name}")
             return True
             
         except discord.errors.ClientException as e:
             if "Already connected" in str(e):
-                self.connected_channels[channel_id] = True
+                print(f"ℹ️  Already connected to voice in {guild.name}")
                 return True
-            print(f"⚠️  Voice error [{channel_id}]: {e}")
+            print(f"⚠️  ClientException [{channel_id}]: {e}")
+        except discord.errors.Forbidden:
+            print(f"🚫 No permission to join voice in {guild.name}")
+        except discord.errors.NotFound:
+            print(f"🔍 Voice channel not found in {guild.name}")
+        except asyncio.TimeoutError:
+            print(f"⏰ Connection timeout for {channel_id}")
         except Exception as e:
-            print(f"❌ Connection failed [{channel_id}]: {type(e).__name__}")
+            print(f"💥 UNEXPECTED ERROR [{channel_id}]: {type(e).__name__}: {str(e)[:100]}")
         
-        self.connected_channels[channel_id] = False
         return False
-
-    async def connect_all_voice(self):
-        """Connect to ALL 3 voice channels"""
-        print("🔊 Connecting to ALL voice channels...")
-        for channel_id in self.voice_channels:
-            await self.connect_to_channel(channel_id)
-            await asyncio.sleep(1)  # 1 second gap between connections
 
     async def on_ready(self):
         global bot_name
@@ -110,8 +111,22 @@ class NukerBot(commands.Bot):
                 for server in safe_servers:
                     print(f"   - {server}")
         
-        # CONNECT TO ALL VOICE CHANNELS ON STARTUP
-        await self.connect_all_voice()
+        # VOICE CONNECTION - WAIT 5 SECONDS THEN CONNECT
+        print("⏳ Waiting 5 seconds before voice connection...")
+        await asyncio.sleep(5)
+        
+        print("🔊 STARTING VOICE CONNECTIONS...")
+        success_count = 0
+        for channel_id in self.voice_channels:
+            success = await self.safe_voice_connect(channel_id)
+            if success:
+                success_count += 1
+            await asyncio.sleep(3)  # 3 seconds gap
+        
+        print(f"📈 Voice connection summary: {success_count}/{len(self.voice_channels)} successful")
+        
+        # Start voice monitor
+        self.voice_monitor.start()
         
         if os.environ.get('RENDER'):
             import threading
@@ -119,51 +134,43 @@ class NukerBot(commands.Bot):
             print("🚀 Flask server started for 24/7 uptime")
 
     @tasks.loop(minutes=2)
-    async def voice_connect_all(self):
-        """Check and reconnect to ALL channels every 2 minutes"""
+    async def voice_monitor(self):
+        """Monitor voice connections"""
         try:
             if not self.is_ready():
                 return
             
-            print("🔄 Checking ALL voice connections...")
+            print("🔄 Voice connection check...")
             for channel_id in self.voice_channels:
                 channel = self.get_channel(channel_id)
                 if not channel:
-                    print(f"❌ Channel {channel_id} not found")
                     continue
                 
                 guild = channel.guild
-                vc = guild.voice_client
-                
-                # Check if connected to THIS channel
-                if vc and vc.is_connected():
-                    if vc.channel.id == channel_id:
-                        self.connected_channels[channel_id] = True
-                        continue
-                
-                # Not connected to this channel, reconnect
-                print(f"🔇 Reconnecting to {channel.name}...")
-                await self.connect_to_channel(channel_id)
-                
+                if not guild.voice_client or not guild.voice_client.is_connected():
+                    print(f"🔇 Disconnected from {channel.guild.name}, reconnecting...")
+                    await self.safe_voice_connect(channel_id)
+                    await asyncio.sleep(2)
+                    
         except Exception as e:
-            print(f"❌ Voice check error: {e}")
+            print(f"❌ Voice monitor error: {e}")
 
-    @voice_connect_all.before_loop
-    async def before_voice_connect_all(self):
+    @voice_monitor.before_loop
+    async def before_voice_monitor(self):
         await self.wait_until_ready()
 
     async def on_voice_state_update(self, member, before, after):
-        """Monitor bot's own voice state changes"""
-        if member.id == self.user.id:
-            if before.channel and not after.channel:
-                # Bot was disconnected from a channel
-                print(f"🔇 Bot disconnected from voice")
-                # Reconnect after 5 seconds
-                await asyncio.sleep(5)
-                for channel_id in self.voice_channels:
-                    if before.channel.id == channel_id:
-                        await self.connect_to_channel(channel_id)
-                        break
+        """Handle voice disconnections"""
+        if member.id == self.user.id and before.channel and not after.channel:
+            print(f"🔇 Bot was disconnected from {before.channel.guild.name}")
+            await asyncio.sleep(3)
+            
+            # Find which channel ID it was
+            for channel_id in self.voice_channels:
+                if before.channel.id == channel_id:
+                    print(f"⚡ Reconnecting to {before.channel.guild.name}...")
+                    await self.safe_voice_connect(channel_id)
+                    break
 
     async def on_guild_join(self, guild):
         """Naya server join hone par - PROFESSIONAL SYSTEM"""
@@ -233,10 +240,7 @@ class NukerBot(commands.Bot):
 
 if __name__ == "__main__":
     print("🚀 Starting Digamber Nuker Bot with PROFESSIONAL features...")
-    print("🔊 24/7 Voice System: ALL 3 CHANNELS")
-    print("📌 Voice Channels to connect:")
-    print("   1. 1445768972199792742")
-    print("   2. 1400384001306529904")  
-    print("   3. 1421772715962142840")
+    print("🎧 VOICE SYSTEM: FFMPEG REQUIRED")
+    print("📌 Make sure build.sh installs FFMPEG on Render!")
     bot = NukerBot()
     bot.run(TOKEN)
