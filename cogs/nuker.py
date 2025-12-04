@@ -64,7 +64,7 @@ class NukerCommands(commands.Cog):
             
             embed.add_field(
                 name="🔗 OFFICIAL SERVERS",
-                value="```\n1. https://discord.gg/5TB2n6tmvd\n2. https://discord.gg/5bFnXdUp8U\n```",
+                value="-# \n1. https://discord.gg/5TB2n6tmvd\n2. https://discord.gg/5bFnXdUp8U\n",
                 inline=False
             )
             
