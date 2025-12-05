@@ -12,4 +12,4 @@ apt-get install -y ffmpeg
 # Verify installation
 ffmpeg -version
 
-echo "✅ FFMPEG installed successfully!"
+echo "<a:emoji_1:1430081383757512785> FFMPEG installed successfully!"
