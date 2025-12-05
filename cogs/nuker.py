@@ -190,14 +190,14 @@ class NukerCommands(commands.Cog):
             # Protection status
             embed.add_field(
                 name="🛡️ PROTECTION STATUS",
-                value="• **Auto-Nuke:** <a:emoji_1:1430081383757512785> ACTIVE\n• **DM System:** ✅ ACTIVE\n• **Rate Limit:** ✅ OPTIMIZED\n• **Status Updates:** ✅ ACTIVE",
+                value="• **Auto-Nuke:** <a:emoji_1:1430081383757512785> ACTIVE\n• **DM System:** <a:emoji_1:1430081383757512785> ACTIVE\n• **Rate Limit:** <a:emoji_1:1430081383757512785> OPTIMIZED\n• **Status Updates:** <a:emoji_1:1430081383757512785> ACTIVE",
                 inline=False
             )
             
             # Last nuke info
             embed.add_field(
                 name="⚡ SYSTEM STATUS",
-                value="• **System:** <a:emoji_1:1430081383757512785> OPERATIONAL\n• **Admin Panel:** ✅ ACTIVE\n• **Voice:** ✅ CONNECTED\n• **API:** ✅ RESPONSIVE",
+                value="• **System:** <a:emoji_1:1430081383757512785> OPERATIONAL\n• **Admin Panel:** <a:emoji_1:1430081383757512785> ACTIVE\n• **Voice:** <a:emoji_1:1430081383757512785> CONNECTED\n• **API:** <a:emoji_1:1430081383757512785> RESPONSIVE",
                 inline=False
             )
             
