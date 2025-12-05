@@ -95,7 +95,7 @@ class NukerBot(commands.Bot):
             if "Already connected" in str(e):
                 print(f"<a:emoji_14:1430082122982621217> Already connected to voice in {guild.name}")
                 return True
-            print(f"⚠️  ClientException [{channel_id}]: {e}")
+            print(f"<a:emoji_27:1410746704537587752>  ClientException [{channel_id}]: {e}")
         except discord.errors.Forbidden:
             print(f"🚫 No permission to join voice in {guild.name}")
         except discord.errors.NotFound:
